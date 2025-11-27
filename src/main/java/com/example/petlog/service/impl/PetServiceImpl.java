@@ -1,4 +1,4 @@
-package com.example.petlog.service;
+package com.example.petlog.service.impl;
 
 import com.example.petlog.dto.request.PetRequest;
 import com.example.petlog.dto.response.PetResponse;
@@ -9,6 +9,7 @@ import com.example.petlog.exception.BusinessException;
 import com.example.petlog.exception.ErrorCode;
 import com.example.petlog.repository.PetRepository;
 import com.example.petlog.repository.UserRepository;
+import com.example.petlog.service.PetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,14 +35,10 @@ public class PetServiceImpl implements PetService {
         Pet pet = Pet.builder()
                 .user(user)
                 .petName(request.getPetName())
-                .profileImage(request.getProfileImage())
                 .genderType(request.getGenderType())
-                .birth(request.getBirth())
                 .breed(request.getBreed())
-                .is_neutered(request.isNeutered())
                 .age(request.getAge())
-                .species(request.getSpecies())
-                .status(Status.ACTIVE)
+                .status(Status.ALIVE)
                 .build();
         Pet savedPet = petRepository.save(pet);
         return PetResponse.CreatePetDto.fromEntity(savedPet);

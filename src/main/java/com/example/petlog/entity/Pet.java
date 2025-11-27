@@ -41,7 +41,7 @@ public class Pet {
     private GenderType genderType;
 
     //중성화여부
-    @Column(nullable = false)
+    @Column
     private boolean is_neutered;
 
     //프로필 사진
@@ -53,7 +53,7 @@ public class Pet {
     private Integer age;
 
     //생일
-    @Column(nullable = false)
+    @Column
     private LocalDateTime birth;
 
     //상태
