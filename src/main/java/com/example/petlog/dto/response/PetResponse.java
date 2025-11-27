@@ -35,6 +35,7 @@ public class PetResponse {
                     .breed(pet.getBreed())
                     .genderType(pet.getGenderType())
                     .createdAt(pet.getCreatedAt())
+                    .age(pet.getAge())
                     .build();
         }
 
