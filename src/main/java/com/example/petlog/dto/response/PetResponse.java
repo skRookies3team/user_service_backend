@@ -18,15 +18,22 @@ public class PetResponse {
 
         //펫 이름
         private String petName;
-
+        //품종
+        private String breed;
+        //나이
+        private Integer age;
+        //성별
+        private GenderType genderType;
         //생성일
         private LocalDateTime createdAt;
 
         public static PetResponse.CreatePetDto fromEntity(Pet pet) {
 
-            return PetResponse.CreatePetDto.builder()
+            return CreatePetDto.builder()
                     .petId(pet.getId())
                     .petName(pet.getPetName())
+                    .breed(pet.getBreed())
+                    .genderType(pet.getGenderType())
                     .createdAt(pet.getCreatedAt())
                     .build();
         }

@@ -1,10 +1,6 @@
 package com.example.petlog.controller;
-
 import com.example.petlog.dto.request.PetRequest;
-import com.example.petlog.dto.request.UserRequest;
 import com.example.petlog.dto.response.PetResponse;
-import com.example.petlog.dto.response.UserResponse;
-import com.example.petlog.repository.PetRepository;
 import com.example.petlog.service.PetService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

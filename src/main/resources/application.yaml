@@ -5,12 +5,12 @@ spring:
     url: "${DB_URL}"
     username: "${DB_USERNAME}"
     password: "${DB_PASSWORD}"
-    driverClassName: org.mariadb.jdbc.Driver
+    driverClassName: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
-    database-platform: org.hibernate.dialect.MariaDBDialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 server:
   port: 8080
@@ -21,11 +21,6 @@ token:
 
 springdoc:
   api-docs:
-    path: /swagger-ui/users/v3/api-docs
+    path: "${SWAGGER_DOCS}"
   swagger-ui:
-    path: /swagger-ui/users/index.html
-
-openapi:
-  service:
-    # API Gateway 포트
-    url: "${API_GATEWAY}"
+    path: "${SWAGGER_UI}"
