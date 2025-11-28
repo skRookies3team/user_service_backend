@@ -1,5 +1,6 @@
 package com.example.petlog.dto.response;
 
+import com.example.petlog.entity.GenderType;
 import com.example.petlog.entity.UserType;
 import com.example.petlog.entity.User;
 import jakarta.persistence.Column;
@@ -10,6 +11,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class UserResponse {
 
@@ -87,5 +89,45 @@ public class UserResponse {
                     .build();
         }
     }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class GetUserDto {
+
+        //사용자 이름(닉네임)
+        private String username;
+        //성별
+        private GenderType genderType;
+        //프로필 사진
+        private String profileImage;
+        //나이
+        private Integer age;
+        //위도
+        private Integer currentLat;
+        //경도
+        private Integer currentLng;
+        //펫코인
+        private Long petCoin;
+        //펫 정보
+        private List<PetResponse.GetPetDto> pets;
+
+        public static GetUserDto fromEntity(User user, List<PetResponse.GetPetDto> pets) {
+
+            return GetUserDto.builder()
+                    .username(user.getUsername())
+                    .genderType(user.getGenderType())
+                    .profileImage(user.getProfileImage())
+                    .age(user.getAge())
+                    .currentLat(user.getCurrentLat())
+                    .currentLng(user.getCurrentLng())
+                    .petCoin(user.getPetCoin())
+                    .pets(pets)
+                    .build();
+        }
+    }
+
+
 
 }

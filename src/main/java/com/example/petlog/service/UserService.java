@@ -9,4 +9,6 @@ public interface UserService {
     UserResponse.CreateUserDto createUser(UserRequest.CreateUserDto request);
     UserResponse.LoginDto login(UserRequest.LoginDto authRequest);
     UserResponse.AuthDto getUserDetailsByUserId(String userId);
+
+    UserResponse.GetUserDto getUser(Long userId);
 }
