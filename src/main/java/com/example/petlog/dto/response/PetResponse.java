@@ -27,6 +27,16 @@ public class PetResponse {
         private Integer age;
         //성별
         private GenderType genderType;
+        //프로필 사진
+        private String profileImage;
+        //종류
+        private Species species;
+        //중성화여부
+        private boolean neutered;
+        //생일
+        private LocalDateTime birth;
+        //상태
+        private Status status;
         //생성일
         private LocalDateTime createdAt;
 
@@ -39,6 +49,12 @@ public class PetResponse {
                     .genderType(pet.getGenderType())
                     .createdAt(pet.getCreatedAt())
                     .age(pet.getAge())
+                    .profileImage(pet.getProfileImage())
+                    .species(pet.getSpecies())
+                    .neutered(pet.isNeutered())
+                    .birth(pet.getBirth())
+                    .status(pet.getStatus())
+                    .createdAt(pet.getCreatedAt())
                     .build();
         }
 
@@ -78,7 +94,7 @@ public class PetResponse {
                     .species(pet.getSpecies())
                     .breed(pet.getBreed())
                     .genderType(pet.getGenderType())
-                    .is_neutered(pet.is_neutered())
+                    .is_neutered(pet.isNeutered())
                     .profileImage(pet.getProfileImage())
                     .age(pet.getAge())
                     .birth(pet.getBirth())

@@ -1,7 +1,10 @@
 package com.example.petlog.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -42,7 +45,7 @@ public class Pet {
 
     //중성화여부
     @Column
-    private boolean is_neutered;
+    private boolean neutered;
 
     //프로필 사진
     @Column(nullable = true)

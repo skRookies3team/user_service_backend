@@ -39,6 +39,10 @@ public class PetServiceImpl implements PetService {
                 .breed(request.getBreed())
                 .age(request.getAge())
                 .status(Status.ALIVE)
+                .birth(request.getBirth())
+                .species(request.getSpecies())
+                .neutered(request.isNeutered())
+                .profileImage(request.getProfileImage())
                 .build();
         Pet savedPet = petRepository.save(pet);
         return PetResponse.CreatePetDto.fromEntity(savedPet);
