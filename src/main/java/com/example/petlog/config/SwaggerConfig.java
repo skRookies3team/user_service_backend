@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
     @Bean
-    public OpenAPI customOpenAPI(@Value("${openapi.service.url}") String url) {
+    public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .components(new Components()
                         .addSecuritySchemes("BearerAuth", new SecurityScheme()
