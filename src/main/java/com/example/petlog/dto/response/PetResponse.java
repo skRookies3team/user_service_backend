@@ -49,6 +49,7 @@ public class PetResponse {
     @Builder
     @Getter
     public static class GetPetDto {
+        private Long petId;
         //펫 이름
         private String petName;
         //종류
@@ -72,6 +73,7 @@ public class PetResponse {
         public static PetResponse.GetPetDto fromEntity(Pet pet) {
 
             return PetResponse.GetPetDto.builder()
+                    .petId(pet.getId())
                     .petName(pet.getPetName())
                     .species(pet.getSpecies())
                     .breed(pet.getBreed())
