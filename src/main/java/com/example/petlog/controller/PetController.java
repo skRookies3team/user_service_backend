@@ -18,4 +18,5 @@ public class PetController {
     public ResponseEntity<PetResponse.CreatePetDto> createPet(@RequestHeader("X-USER-ID") Long userId, @Valid @RequestBody PetRequest.CreatePetDto request) {
         return ResponseEntity.ok(petService.createPet(userId, request));
     }
+
 }

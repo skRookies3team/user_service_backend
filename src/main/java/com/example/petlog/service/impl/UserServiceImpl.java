@@ -1,11 +1,14 @@
 package com.example.petlog.service.impl;
 
 import com.example.petlog.dto.request.UserRequest;
+import com.example.petlog.dto.response.PetResponse;
 import com.example.petlog.dto.response.UserResponse;
+import com.example.petlog.entity.Pet;
 import com.example.petlog.entity.User;
 import com.example.petlog.entity.UserType;
 import com.example.petlog.exception.BusinessException;
 import com.example.petlog.exception.ErrorCode;
+import com.example.petlog.repository.PetRepository;
 import com.example.petlog.repository.UserRepository;
 import com.example.petlog.security.jwt.UserInfoDetails;
 import com.example.petlog.service.PetService;
@@ -22,14 +25,17 @@ import org.springframework.core.env.Environment;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PetRepository petRepository;
     private final PetService petService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -117,6 +123,19 @@ public class UserServiceImpl implements UserService {
                 .issuedAt(Date.from(now))
                 .signWith(secretKey)
                 .compact();
+    }
+
+    @Override
+    // 유저 정보, 반려견 정보 반환
+    public UserResponse.GetUserDto getUser(Long userId) {
+        // 아이디 값으로 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        //펫 정보 조회
+        List<Pet> pets = petRepository.findAllByUserId(userId);
+        List<PetResponse.GetPetDto> petList = pets.stream().map(PetResponse.GetPetDto::fromEntity).toList();
+
+        return UserResponse.GetUserDto.fromEntity(user,petList);
     }
 
 }

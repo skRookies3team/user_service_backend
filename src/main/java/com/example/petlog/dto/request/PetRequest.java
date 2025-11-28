@@ -1,5 +1,6 @@
 package com.example.petlog.dto.request;
 
+
 import com.example.petlog.entity.GenderType;
 import com.example.petlog.entity.Species;
 import jakarta.validation.constraints.NotNull;
@@ -19,18 +20,27 @@ public class PetRequest {
         //펫 이름(이름, 품종, 나이, 성별)
         @NotNull
         private String petName;
-
         //품종
         @NotNull
         private String breed;
-
         //성별
         @NotNull
         private GenderType genderType;
-
         //나이
         @NotNull
         private Integer age;
+        //생일
+        @NotNull
+        private LocalDateTime birth;
+        //종류
+        @NotNull
+        private Species species;
+        //중성화여부
+        @NotNull
+        private boolean neutered;
+        //프로필 사진
+        private String profileImage;
+
 
 
     }
