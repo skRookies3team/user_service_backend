@@ -115,10 +115,11 @@ public class UserServiceImpl implements UserService {
         Instant now = Instant.now();
         Long expirationTime = Long.parseLong(Objects.requireNonNull(env.getProperty("token.expiration-time")));
         String userId = String.valueOf(userDetails.getUserId());
-
+        String username = userDetails.getUsername();
         // JWT 토큰 생성
         return Jwts.builder()
                 .subject(userId)
+                .claim("username",username)
                 .expiration(Date.from(now.plusMillis(expirationTime)))
                 .issuedAt(Date.from(now))
                 .signWith(secretKey)
