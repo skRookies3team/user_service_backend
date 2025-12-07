@@ -128,6 +128,29 @@ public class UserResponse {
         }
     }
 
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UpdateUserDto {
+        //사용자 이름(닉네임)
+        private String username;
+        //성별
+        private GenderType genderType;
+        //프로필 사진
+        private String profileImage;
+        //나이
+        private Integer age;
 
+        public static UpdateUserDto fromEntity(User user) {
+
+            return UpdateUserDto.builder()
+                    .username(user.getUsername())
+                    .genderType(user.getGenderType())
+                    .profileImage(user.getProfileImage())
+                    .age(user.getAge())
+                    .build();
+        }
+    }
 
 }

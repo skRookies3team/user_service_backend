@@ -20,6 +20,23 @@ public class UserController {
         return ResponseEntity.ok(userService.createUser(request));
     }
 
+    @PostMapping("/me")
+    public ResponseEntity<UserResponse.UpdateUserDto> updateUser(@RequestHeader("X-USER-ID") Long userId, @Valid @RequestBody UserRequest.UpdateUserDto request) {
+        return ResponseEntity.ok(userService.updateUser(userId, request));
+    }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<String> deleteUser(@RequestHeader("X-USER-ID") Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.ok("해당 회원 정보가 삭제되었습니다.");
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUserByUserId(@PathVariable("id") Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.ok("해당 회원 정보가 삭제되었습니다.");
+    }
+
     @PostMapping("/login")
     public ResponseEntity<UserResponse.LoginDto> login(
             @RequestBody UserRequest.LoginDto loginRequestDto

@@ -139,4 +139,27 @@ public class UserServiceImpl implements UserService {
         return UserResponse.GetUserDto.fromEntity(user,petList);
     }
 
+    @Override
+    public UserResponse.UpdateUserDto updateUser(Long userId, UserRequest.UpdateUserDto request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        user.updateUser(
+                request.getUsername(),
+                request.getAge(),
+                request.getProfileImage(),
+                request.getGenderType()
+        );
+        userRepository.save(user);
+        return UserResponse.UpdateUserDto.fromEntity(user);
+
+    }
+
+    @Override
+    public void deleteUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        userRepository.delete(user);
+    }
+
 }
