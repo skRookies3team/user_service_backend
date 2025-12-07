@@ -80,6 +80,12 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-
+    public void updateUser(String username, int age, String profileImage, GenderType genderType) {
+        // 필요하다면 이 곳에서 유효성 검증 로직을 추가할 수 있습니다.
+        this.username = username;
+        this.age = age;
+        this.profileImage = profileImage;
+        this.genderType = genderType;
+    }
 
 }

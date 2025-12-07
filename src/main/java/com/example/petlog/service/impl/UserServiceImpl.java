@@ -115,10 +115,11 @@ public class UserServiceImpl implements UserService {
         Instant now = Instant.now();
         Long expirationTime = Long.parseLong(Objects.requireNonNull(env.getProperty("token.expiration-time")));
         String userId = String.valueOf(userDetails.getUserId());
-
+        String username = userDetails.getUsername();
         // JWT 토큰 생성
         return Jwts.builder()
                 .subject(userId)
+                .claim("username",username)
                 .expiration(Date.from(now.plusMillis(expirationTime)))
                 .issuedAt(Date.from(now))
                 .signWith(secretKey)
@@ -136,6 +137,29 @@ public class UserServiceImpl implements UserService {
         List<PetResponse.GetPetDto> petList = pets.stream().map(PetResponse.GetPetDto::fromEntity).toList();
 
         return UserResponse.GetUserDto.fromEntity(user,petList);
+    }
+
+    @Override
+    public UserResponse.UpdateUserDto updateUser(Long userId, UserRequest.UpdateUserDto request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        user.updateUser(
+                request.getUsername(),
+                request.getAge(),
+                request.getProfileImage(),
+                request.getGenderType()
+        );
+        userRepository.save(user);
+        return UserResponse.UpdateUserDto.fromEntity(user);
+
+    }
+
+    @Override
+    public void deleteUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        userRepository.delete(user);
     }
 
 }
