@@ -19,4 +19,9 @@ public class PetController {
         return ResponseEntity.ok(petService.createPet(userId, request));
     }
 
+    @PostMapping("{petId}")
+    public ResponseEntity<PetResponse.UpdatePetDto> updatePet(@PathVariable Long petId, @Valid @RequestBody PetRequest.UpdatePetDto request) {
+        return ResponseEntity.ok(petService.updatePet(petId, request));
+    }
+
 }
