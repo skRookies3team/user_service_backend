@@ -2,6 +2,7 @@ package com.example.petlog.service;
 
 import com.example.petlog.dto.request.UserRequest;
 import com.example.petlog.dto.response.UserResponse;
+import jakarta.validation.Valid;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService {
@@ -11,4 +12,8 @@ public interface UserService {
     UserResponse.AuthDto getUserDetailsByUserId(String userId);
 
     UserResponse.GetUserDto getUser(Long userId);
+
+    UserResponse.UpdateUserDto updateUser(Long userId, UserRequest.UpdateUserDto request);
+
+    void deleteUser(Long userId);
 }

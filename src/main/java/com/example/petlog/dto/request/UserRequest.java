@@ -43,4 +43,21 @@ public class UserRequest{
         private String password;
 
     }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class UpdateUserDto {
+
+        @NotNull
+        private String username;
+        @NotNull
+        private Integer age;
+        @NotNull
+        private String profileImage;
+
+        @NotNull
+        private GenderType genderType;
+
+    }
 }
