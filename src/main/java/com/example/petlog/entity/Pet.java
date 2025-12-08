@@ -69,4 +69,20 @@ public class Pet {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public void updatePet(String petName, String breed, GenderType genderType, Integer age, LocalDateTime birth, Species species, boolean neutered, String profileImage) {
+        this.petName = petName;
+        this.breed = breed;
+        this.genderType = genderType;
+        this.age = age;
+        this.birth = birth;
+        this.species = species;
+        this.neutered = neutered;
+        this.profileImage = profileImage;
+
+    }
+
+    public void lostPet() {
+        this.status = Status.LOST;
+    }
 }
