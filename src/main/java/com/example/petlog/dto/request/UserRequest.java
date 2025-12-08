@@ -76,4 +76,12 @@ public class UserRequest{
         private String username;
 
     }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class CoinDto {
+        @NotNull
+        private Long amount;
+    }
 }

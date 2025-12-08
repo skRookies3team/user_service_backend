@@ -1,5 +1,7 @@
 package com.example.petlog.entity;
 
+import com.example.petlog.exception.BusinessException;
+import com.example.petlog.exception.ErrorCode;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -92,9 +94,19 @@ public class User {
         this.genderType = genderType;
     }
 
-    public void updateProfile(@NotNull String username, @NotNull String profileImage, @NotNull String statusMessage) {
+    public void updateProfile(String username,String profileImage,String statusMessage) {
         this.username = username;
         this.profileImage = profileImage;
         this.statusMessage = statusMessage;
+    }
+
+    public void earnCoin(Long amount) {
+        this.petCoin += amount;
+    }
+    public void redeemCoin(Long petCoin, Long amount) {
+        if (petCoin < amount) {
+            throw new BusinessException(ErrorCode.PET_COIN_NOT_ENOUGH);
+        }
+        this.petCoin -= amount;
     }
 }

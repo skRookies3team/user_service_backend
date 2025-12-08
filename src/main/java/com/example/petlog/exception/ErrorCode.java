@@ -27,7 +27,7 @@ public enum ErrorCode {
     //펫 관련
     PET_NAME_DUPLICATE("PET_002","중복된 이름입니다.", HttpStatus.BAD_REQUEST),
     PET_NOT_FOUND("PET_002","펫을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-
+    PET_COIN_NOT_ENOUGH("PET_003","펫코인이 부족합니다.", HttpStatus.BAD_REQUEST),
 
     // 서버 오류 (50X)
     INTERNAL_SERVER_ERROR("SERVER_001", "서버 내부 오류가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR),

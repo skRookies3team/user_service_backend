@@ -18,4 +18,10 @@ public interface UserService {
     void deleteUser(Long userId);
 
     UserResponse.UpdateProfileDto updateProfile(Long userId, UserRequest.@Valid UpdateProfileDto request);
+
+    UserResponse.CoinDto getCoin(Long userId);
+
+    UserResponse.CoinDto earnCoin(Long userId, UserRequest.@Valid CoinDto request);
+
+    UserResponse.CoinDto redeemCoin(Long userId, UserRequest.@Valid CoinDto request);
 }

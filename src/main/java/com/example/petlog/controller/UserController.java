@@ -54,4 +54,19 @@ public class UserController {
     public ResponseEntity<UserResponse.UpdateProfileDto> updateProfile(@RequestHeader("X-USER-ID") Long userId, @Valid @RequestBody UserRequest.UpdateProfileDto request) {
         return ResponseEntity.ok(userService.updateProfile(userId, request));
     }
+    @GetMapping("/{id}/coin")
+    public ResponseEntity<UserResponse.CoinDto> getCoin(@PathVariable("id") Long userId) {
+        return ResponseEntity.ok(userService.getCoin(userId));
+    }
+
+
+    @PostMapping("/{id}/coin/earn")
+    public ResponseEntity<UserResponse.CoinDto> earnCoin(@PathVariable("id") Long userId, @Valid @RequestBody UserRequest.CoinDto request) {
+        return ResponseEntity.ok(userService.earnCoin(userId, request));
+    }
+
+    @PostMapping("/{id}/coin/redeem")
+    public ResponseEntity<UserResponse.CoinDto> redeemCoin(@PathVariable("id") Long userId, @Valid @RequestBody UserRequest.CoinDto request) {
+        return ResponseEntity.ok(userService.redeemCoin(userId, request));
+    }
 }
