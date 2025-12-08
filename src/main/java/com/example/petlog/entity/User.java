@@ -1,6 +1,7 @@
 package com.example.petlog.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -38,6 +39,9 @@ public class User {
     //사용자 이름(닉네임)
     @Column(nullable = false)
     private String username;
+
+    @Column
+    private String statusMessage;
 
     //사용자 타입
     @Enumerated(EnumType.STRING)
@@ -81,11 +85,16 @@ public class User {
     private LocalDateTime updatedAt;
 
     public void updateUser(String username, int age, String profileImage, GenderType genderType) {
-        // 필요하다면 이 곳에서 유효성 검증 로직을 추가할 수 있습니다.
+
         this.username = username;
         this.age = age;
         this.profileImage = profileImage;
         this.genderType = genderType;
     }
 
+    public void updateProfile(@NotNull String username, @NotNull String profileImage, @NotNull String statusMessage) {
+        this.username = username;
+        this.profileImage = profileImage;
+        this.statusMessage = statusMessage;
+    }
 }

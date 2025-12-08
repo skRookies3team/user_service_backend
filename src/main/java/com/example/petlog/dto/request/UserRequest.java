@@ -60,4 +60,20 @@ public class UserRequest{
         private GenderType genderType;
 
     }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class UpdateProfileDto {
+
+        @NotNull
+        private String statusMessage;
+
+        @NotNull
+        private String profileImage;
+
+        @NotNull
+        private String username;
+
+    }
 }

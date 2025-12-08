@@ -102,6 +102,8 @@ public class UserResponse {
         private GenderType genderType;
         //프로필 사진
         private String profileImage;
+        //상태메세지
+        private String statusMessage;
         //나이
         private Integer age;
         //위도
@@ -116,6 +118,7 @@ public class UserResponse {
         public static GetUserDto fromEntity(User user, List<PetResponse.GetPetDto> pets) {
 
             return GetUserDto.builder()
+                    .statusMessage(user.getStatusMessage())
                     .username(user.getUsername())
                     .genderType(user.getGenderType())
                     .profileImage(user.getProfileImage())
@@ -149,6 +152,28 @@ public class UserResponse {
                     .genderType(user.getGenderType())
                     .profileImage(user.getProfileImage())
                     .age(user.getAge())
+                    .build();
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UpdateProfileDto {
+        //사용자 이름(닉네임)
+        private String username;
+        //프로필 사진
+        private String profileImage;
+        //상태메세지
+        private String statusMessage;
+
+        public static UpdateProfileDto fromEntity(User user) {
+
+            return UpdateProfileDto .builder()
+                    .username(user.getUsername())
+                    .profileImage(user.getProfileImage())
+                    .statusMessage(user.getStatusMessage())
                     .build();
         }
     }

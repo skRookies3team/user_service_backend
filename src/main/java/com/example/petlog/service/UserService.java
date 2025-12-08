@@ -16,4 +16,6 @@ public interface UserService {
     UserResponse.UpdateUserDto updateUser(Long userId, UserRequest.UpdateUserDto request);
 
     void deleteUser(Long userId);
+
+    UserResponse.UpdateProfileDto updateProfile(Long userId, UserRequest.@Valid UpdateProfileDto request);
 }
