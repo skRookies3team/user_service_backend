@@ -10,6 +10,7 @@ import com.example.petlog.exception.ErrorCode;
 import com.example.petlog.repository.PetRepository;
 import com.example.petlog.repository.UserRepository;
 import com.example.petlog.service.PetService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -48,5 +49,46 @@ public class PetServiceImpl implements PetService {
         return PetResponse.CreatePetDto.fromEntity(savedPet);
 
 
+    }
+
+    @Override
+    public PetResponse.UpdatePetDto updatePet(Long petId, PetRequest.@Valid UpdatePetDto request) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PET_NOT_FOUND));
+        pet.updatePet(
+                request.getPetName(),
+                request.getBreed(),
+                request.getGenderType(),
+                request.getAge(),
+                request.getBirth(),
+                request.getSpecies(),
+                request.isNeutered(),
+                request.getProfileImage()
+        );
+        petRepository.save(pet);
+        return PetResponse.UpdatePetDto.fromEntity(pet);
+    }
+
+    @Override
+    public PetResponse.GetPetDto getPet(Long petId) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PET_NOT_FOUND));
+        return PetResponse.GetPetDto.fromEntity(pet);
+    }
+
+    @Override
+    public void deletePet(Long petId) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PET_NOT_FOUND));
+        petRepository.delete(pet);
+
+    }
+
+    @Override
+    public void lostPet(Long petId) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PET_NOT_FOUND));
+        pet.lostPet();
+        petRepository.save(pet);
     }
 }

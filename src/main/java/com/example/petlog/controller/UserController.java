@@ -20,7 +20,7 @@ public class UserController {
         return ResponseEntity.ok(userService.createUser(request));
     }
 
-    @PostMapping("/me")
+    @PatchMapping
     public ResponseEntity<UserResponse.UpdateUserDto> updateUser(@RequestHeader("X-USER-ID") Long userId, @Valid @RequestBody UserRequest.UpdateUserDto request) {
         return ResponseEntity.ok(userService.updateUser(userId, request));
     }
@@ -48,5 +48,10 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse.GetUserDto> getUser(@PathVariable("id") Long userId) {
         return ResponseEntity.ok(userService.getUser(userId));
+    }
+
+    @PatchMapping("/me")
+    public ResponseEntity<UserResponse.UpdateProfileDto> updateProfile(@RequestHeader("X-USER-ID") Long userId, @Valid @RequestBody UserRequest.UpdateProfileDto request) {
+        return ResponseEntity.ok(userService.updateProfile(userId, request));
     }
 }

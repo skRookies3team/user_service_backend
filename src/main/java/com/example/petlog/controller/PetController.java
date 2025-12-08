@@ -19,4 +19,24 @@ public class PetController {
         return ResponseEntity.ok(petService.createPet(userId, request));
     }
 
+    @PatchMapping("/{petId}")
+    public ResponseEntity<PetResponse.UpdatePetDto> updatePet(@PathVariable Long petId, @Valid @RequestBody PetRequest.UpdatePetDto request) {
+        return ResponseEntity.ok(petService.updatePet(petId, request));
+    }
+    @GetMapping("/{petId}")
+    public ResponseEntity<PetResponse.GetPetDto> getPet(@PathVariable Long petId) {
+        return ResponseEntity.ok(petService.getPet(petId));
+    }
+
+    @DeleteMapping("/{petId}")
+    public ResponseEntity<String> deletePet(@PathVariable Long petId) {
+        petService.deletePet(petId);
+        return ResponseEntity.ok("펫이 삭제되었습니다.");
+    }
+    @PatchMapping("/lost/{petId}")
+    public ResponseEntity<String> lostPet(@PathVariable Long petId) {
+        petService.lostPet(petId);
+        return ResponseEntity.ok("상태 변경을 완료하였습니다.");
+    }
+
 }

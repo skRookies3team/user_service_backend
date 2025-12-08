@@ -26,7 +26,7 @@ public enum ErrorCode {
     USER_NAME_DUPLICATE("USER_002","중복된 이름입니다.", HttpStatus.BAD_REQUEST),
     //펫 관련
     PET_NAME_DUPLICATE("PET_002","중복된 이름입니다.", HttpStatus.BAD_REQUEST),
-
+    PET_NOT_FOUND("PET_002","펫을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
 
     // 서버 오류 (50X)
