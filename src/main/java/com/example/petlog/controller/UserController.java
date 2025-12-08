@@ -20,7 +20,7 @@ public class UserController {
         return ResponseEntity.ok(userService.createUser(request));
     }
 
-    @PostMapping("/me")
+    @PatchMapping("/me")
     public ResponseEntity<UserResponse.UpdateUserDto> updateUser(@RequestHeader("X-USER-ID") Long userId, @Valid @RequestBody UserRequest.UpdateUserDto request) {
         return ResponseEntity.ok(userService.updateUser(userId, request));
     }

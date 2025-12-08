@@ -19,7 +19,7 @@ public class PetController {
         return ResponseEntity.ok(petService.createPet(userId, request));
     }
 
-    @PostMapping("/{petId}")
+    @PatchMapping("/{petId}")
     public ResponseEntity<PetResponse.UpdatePetDto> updatePet(@PathVariable Long petId, @Valid @RequestBody PetRequest.UpdatePetDto request) {
         return ResponseEntity.ok(petService.updatePet(petId, request));
     }
@@ -33,7 +33,7 @@ public class PetController {
         petService.deletePet(petId);
         return ResponseEntity.ok("펫이 삭제되었습니다.");
     }
-    @PostMapping("/lost/{petId}")
+    @PatchMapping("/lost/{petId}")
     public ResponseEntity<String> lostPet(@PathVariable Long petId) {
         petService.lostPet(petId);
         return ResponseEntity.ok("상태 변경을 완료하였습니다.");
