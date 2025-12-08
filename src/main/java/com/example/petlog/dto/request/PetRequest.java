@@ -41,7 +41,29 @@ public class PetRequest {
         //프로필 사진
         private String profileImage;
 
+    }
 
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class UpdatePetDto {
+
+        //펫 이름
+        private String petName;
+        //품종
+        private String breed;
+        //성별
+        private GenderType genderType;
+        //나이
+        private Integer age;
+        //생일
+        private LocalDateTime birth;
+        //종류
+        private Species species;
+        //중성화여부
+        private boolean neutered;
+        //프로필 사진
+        private String profileImage;
 
     }
 }
