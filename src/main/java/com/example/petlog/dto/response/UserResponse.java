@@ -170,12 +170,28 @@ public class UserResponse {
 
         public static UpdateProfileDto fromEntity(User user) {
 
-            return UpdateProfileDto .builder()
+            return UpdateProfileDto.builder()
                     .username(user.getUsername())
                     .profileImage(user.getProfileImage())
                     .statusMessage(user.getStatusMessage())
                     .build();
         }
     }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class CoinDto {
+        private Long petCoin;
+
+        public static CoinDto fromEntity(User user) {
+            return CoinDto.builder()
+                    .petCoin(user.getPetCoin())
+                    .build();
+        }
+
+    }
+
 
 }

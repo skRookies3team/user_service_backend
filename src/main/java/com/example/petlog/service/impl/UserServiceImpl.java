@@ -176,4 +176,30 @@ public class UserServiceImpl implements UserService {
         return UserResponse.UpdateProfileDto.fromEntity(user);
     }
 
+    @Override
+    public UserResponse.CoinDto getCoin(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        return UserResponse.CoinDto.fromEntity(user);
+    }
+
+    @Override
+    public UserResponse.CoinDto earnCoin(Long userId, UserRequest.@Valid CoinDto request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        user.earnCoin(request.getAmount());
+        userRepository.save(user);
+        return UserResponse.CoinDto.fromEntity(user);
+
+    }
+
+    @Override
+    public UserResponse.CoinDto redeemCoin(Long userId, UserRequest.@Valid CoinDto request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        user.redeemCoin(user.getPetCoin(), request.getAmount());
+        userRepository.save(user);
+        return UserResponse.CoinDto.fromEntity(user);
+    }
+
 }
