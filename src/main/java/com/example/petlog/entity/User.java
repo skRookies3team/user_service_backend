@@ -77,6 +77,9 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Pet> pets = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Archive> archives = new ArrayList<>();
 
 
     @CreationTimestamp
