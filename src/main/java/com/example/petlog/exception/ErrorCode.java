@@ -32,13 +32,15 @@ public enum ErrorCode {
     //파일 관련
     FILE_NOT_EXIST("FILE_001","파일이 존재하지 않습니다.", HttpStatus.NOT_FOUND),
     INVALID_FILE_EXTENSION("FILE_002","잘못된 파일 확장자입니다.", HttpStatus.BAD_REQUEST),
-    UPLOAD_FILE_IO_EXCEPTION("FILE_003","파일 업로드 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    INVALID_URL_FORMAT("FILE_003","잘못된 URL 형식입니다.", HttpStatus.BAD_REQUEST),
+    UPLOAD_FILE_IO_EXCEPTION("FILE_004","파일 업로드 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    DELETE_FILE_IO_EXCEPTION("FILE_005","파일 삭제 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     //아카이브 관련
     ARCHIVE_NOT_FOUND("ARCHIVE_001","보관함을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     // 서버 오류 (50X)
     INTERNAL_SERVER_ERROR("SERVER_001", "서버 내부 오류가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR),
-    DATABASE_ERROR("SERVER_002", "데이터베이스 오류가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR),
-    EXTERNAL_API_ERROR("SERVER_003", "외부 API 호출 중 오류가 발생했습니다", HttpStatus.BAD_GATEWAY);
+    DATABASE_ERROR("SERVER_002", "데이터베이스 오류가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR);
+
 
     private final String code;
     private final String message;

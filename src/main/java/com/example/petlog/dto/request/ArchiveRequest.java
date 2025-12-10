@@ -3,6 +3,7 @@ package com.example.petlog.dto.request;
 import com.example.petlog.dto.response.PetResponse;
 import com.example.petlog.entity.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +21,15 @@ public class ArchiveRequest {
     public static class CreateArchiveDto {
         @NotNull
         List<MultipartFile> images;
-
-
     }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class DeleteArchiveDto {
+        @NotNull
+        List<Long> archiveIds ;
+    }
+
+
 }

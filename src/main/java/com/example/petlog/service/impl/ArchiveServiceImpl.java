@@ -26,6 +26,7 @@ public class ArchiveServiceImpl implements ArchiveService {
     private final ArchiveRepository archiveRepository;
     private final UserRepository userRepository;
     private final ImageService imageService;
+
     @Override
     public ArchiveResponse.CreateArchiveDtoList createArchive(ArchiveRequest.CreateArchiveDto request, Long userId) {
 
@@ -63,5 +64,18 @@ public class ArchiveServiceImpl implements ArchiveService {
         Archive archive = archiveRepository.findById(archiveId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ARCHIVE_NOT_FOUND));
         return ArchiveResponse.CreateArchiveDto.fromEntity(archive);
+    }
+
+    @Override
+    public void delete(Long userId, ArchiveRequest.DeleteArchiveDto request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        List<String> imageUrls = archiveRepository.findImageUrlsByArchiveIds(request.getArchiveIds());
+        //1. S3에서 사진을 삭제함
+        imageService.delete(imageUrls);
+
+        //2.보관함 테이블에서 사진을 삭제
+        archiveRepository.deleteAllById(request.getArchiveIds());
+
     }
 }

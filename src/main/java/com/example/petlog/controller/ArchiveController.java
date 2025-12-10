@@ -1,6 +1,7 @@
 package com.example.petlog.controller;
 
 import com.example.petlog.dto.request.ArchiveRequest;
+import com.example.petlog.dto.request.ImageRequest;
 import com.example.petlog.dto.response.ArchiveResponse;
 import com.example.petlog.service.ArchiveService;
 import com.example.petlog.service.ImageService;
@@ -18,15 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ArchiveController {
 
-    private final ImageService imageService;
     private final ArchiveService archiveService;
 
-    @Operation(summary = "이미지 업로드", description = "S3 버킷에 이미지를 업로드하고 URL 목록을 반환합니다.")
-    @PostMapping(value = "/upload",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<List<String>> s3Upload(@RequestPart(value = "multipartFile") List<MultipartFile> multipartFile) {
-        List<String> upload = imageService.upload(multipartFile);
-        return ResponseEntity.ok(upload);
-    }
 
     @Operation(summary = "사진 생성", description = "보관함에 사진을 저장합니다.")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -45,4 +39,12 @@ public class ArchiveController {
     public ResponseEntity<ArchiveResponse.CreateArchiveDto> getArchive(@PathVariable("archiveId") Long archiveId) {
         return ResponseEntity.ok(archiveService.getArchive(archiveId));
     }
+
+    @Operation(summary = "보관함에서 사진 삭제", description = "보관함에서 사진을 삭제합니다.")
+    @DeleteMapping
+    public ResponseEntity<String> s3Delete(@RequestHeader("X-USER-ID") Long userId, @RequestBody ArchiveRequest.DeleteArchiveDto request) {
+        archiveService.delete(userId, request);
+        return ResponseEntity.ok("이미지 삭제 성공");
+    }
+
 }
