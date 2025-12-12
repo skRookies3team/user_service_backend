@@ -20,10 +20,13 @@ public enum ErrorCode {
     // 비즈니스 로직 관련 (40X)
     BUSINESS_RULE_VIOLATION("BIZ_001", "비즈니스 규칙 위반입니다", HttpStatus.BAD_REQUEST),
     OPERATION_NOT_ALLOWED("BIZ_002", "허용되지 않은 작업입니다", HttpStatus.BAD_REQUEST),
+
     //사용자 관련
     USER_NOT_FOUND("USER_001","사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     USER_ID_DUPLICATE("USER_002","중복된 아이디입니다.", HttpStatus.BAD_REQUEST),
     USER_NAME_DUPLICATE("USER_002","중복된 이름입니다.", HttpStatus.BAD_REQUEST),
+    BIRTH_IS_NULL("USER_003","생일값이 존재하지 않니다.",HttpStatus.BAD_REQUEST),
+
     //펫 관련
     PET_NAME_DUPLICATE("PET_002","중복된 이름입니다.", HttpStatus.BAD_REQUEST),
     PET_NOT_FOUND("PET_002","펫을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),

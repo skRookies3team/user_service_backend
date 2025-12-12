@@ -4,10 +4,16 @@ import com.example.petlog.dto.request.UserRequest;
 import com.example.petlog.dto.response.UserResponse;
 import com.example.petlog.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -16,10 +22,10 @@ public class UserController {
 
     private final UserService userService;
 
-    @Operation(summary = "회원가입", description = "새로운 사용자를 등록합니다. 펫 정보가 없어도 회원가입을 할 수 있습니다.")
-    @PostMapping("/create")
-    public ResponseEntity<UserResponse.CreateUserDto> createUser(@Valid @RequestBody UserRequest.CreateUserDto request) {
-        return ResponseEntity.ok(userService.createUser(request));
+
+    @PostMapping(value = "/signup",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UserResponse.CreateUserDto> createUser(@RequestPart(value = "multipartFile") List<MultipartFile> multipartFile, @Valid @RequestPart("request") UserRequest.CreateUserAndPetDto request) {
+        return ResponseEntity.ok(userService.createUser(multipartFile, request));
     }
 
     @Operation(summary = "회원 정보 수정", description = "현재 로그인된 사용자 정보를 수정합니다.")

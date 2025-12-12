@@ -9,7 +9,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -51,11 +53,13 @@ public class UserResponse {
         private UserType role;
         private String email;
         private String username;
+        private String social;
 
         public static LoginDto fromEntity(String token, UserResponse.AuthDto userDetails) {
             return UserResponse.LoginDto.builder()
                     .token(token)
                     .userId(userDetails.getUserId())
+                    .social(userDetails.getSocial())
                     .role(userDetails.getType())
                     .email(userDetails.getEmail())
                     .username(userDetails.getUsername())
@@ -72,6 +76,7 @@ public class UserResponse {
         private String email;
         private String username;
         private String password;
+        private String social;
         private UserType type;
         private String encryptedPwd;
         private LocalDateTime createdAt;
@@ -80,6 +85,7 @@ public class UserResponse {
 
             return AuthDto.builder()
                     .userId(user.getId())
+                    .social(user.getSocial())
                     .email(user.getEmail())
                     .username(user.getUsername())
                     .password(user.getPassword())
@@ -102,10 +108,14 @@ public class UserResponse {
         private GenderType genderType;
         //프로필 사진
         private String profileImage;
+        //소설
+        private String social;
         //상태메세지
         private String statusMessage;
         //나이
         private Integer age;
+        //생일
+        private LocalDate birth;
         //위도
         private Integer currentLat;
         //경도
@@ -120,8 +130,10 @@ public class UserResponse {
             return GetUserDto.builder()
                     .statusMessage(user.getStatusMessage())
                     .username(user.getUsername())
+                    .social(user.getSocial())
                     .genderType(user.getGenderType())
                     .profileImage(user.getProfileImage())
+                    .birth(user.getBirth())
                     .age(user.getAge())
                     .currentLat(user.getCurrentLat())
                     .currentLng(user.getCurrentLng())

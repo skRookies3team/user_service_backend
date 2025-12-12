@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class PetResponse {
@@ -34,7 +35,7 @@ public class PetResponse {
         //중성화여부
         private boolean neutered;
         //생일
-        private LocalDateTime birth;
+        private LocalDate birth;
         //상태
         private Status status;
         //생성일
@@ -81,7 +82,7 @@ public class PetResponse {
         //나이
         private Integer age;
         //생일
-        private LocalDateTime birth;
+        private LocalDate birth;
         //상태
         private Status status;
 
@@ -125,7 +126,7 @@ public class PetResponse {
         //나이
         private Integer age;
         //생일
-        private LocalDateTime birth;
+        private LocalDate birth;
         //상태
         private Status status;
 
