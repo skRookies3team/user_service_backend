@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.security.auth.Subject;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,10 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
+    //소설 아이디
+    @Column(unique = true, nullable = false)
+    private String social;
+
     //비밀번호
     @Column(nullable = false)
     private String password;
@@ -41,7 +46,10 @@ public class User {
     //사용자 이름(닉네임)
     @Column(nullable = false)
     private String username;
-
+    //생일
+    @Column(nullable = false)
+    LocalDate birth;
+    //상태메세지
     @Column
     private String statusMessage;
 
