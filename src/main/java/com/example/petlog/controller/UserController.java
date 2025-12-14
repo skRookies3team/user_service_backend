@@ -24,7 +24,7 @@ public class UserController {
 
 
     @PostMapping(value = "/signup",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<UserResponse.CreateUserDto> createUser(@RequestPart(value = "multipartFile") List<MultipartFile> multipartFile, @Valid @RequestPart("request") UserRequest.CreateUserAndPetDto request) {
+    public ResponseEntity<UserResponse.CreateUserDto> createUser(@RequestPart(value = "multipartFile", required = false) List<MultipartFile> multipartFile, @Valid @RequestPart("request") UserRequest.CreateUserAndPetDto request) {
         return ResponseEntity.ok(userService.createUser(multipartFile, request));
     }
 

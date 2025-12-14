@@ -65,9 +65,13 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByUsername(request.getUser().getUsername())) {
             throw new BusinessException(ErrorCode.USER_NAME_DUPLICATE);
         }
-        List<MultipartFile> userProfiles = List.of(multipartFiles.get(0));
-        List<String> urls = imageService.upload(userProfiles);
-        String userProfile = urls.get(0);
+        String userProfile = null;
+        if (multipartFiles != null && !multipartFiles.isEmpty()) {
+            List<MultipartFile> userProfiles = List.of(multipartFiles.get(0));
+            List<String> urls = imageService.upload(userProfiles);
+            userProfile = urls.get(0);
+        }
+
         Integer age = utils.calculateAge(request.getUser().getBirth());
 
         User user = User.builder()
@@ -85,7 +89,7 @@ public class UserServiceImpl implements UserService {
                 .build();
         User savedUser = userRepository.save(user);
 
-        if (request.getPet()!= null) {
+        if (request.getPet() != null) {
             petService.createPet(multipartFiles.get(1), savedUser.getId(), request.getPet());
 
         }
