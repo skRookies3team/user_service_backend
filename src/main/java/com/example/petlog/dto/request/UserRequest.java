@@ -5,8 +5,24 @@ import com.example.petlog.entity.Pet;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class UserRequest{
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class CreateUserAndPetDto {
+
+        @NotNull
+        private CreateUserDto user;
+        //펫 정보
+        private PetRequest.CreatePetDto pet;
+    }
+
     @Getter
     @Setter
     @NoArgsConstructor
@@ -18,16 +34,15 @@ public class UserRequest{
         @NotNull
         private String username;
         @NotNull
-        private Integer age;
-
-        private String profileImage;
+        private String social;
+        @NotNull
+        private LocalDate birth;
 
         @NotNull
         private GenderType genderType;
-
-        //펫 정보
-        private PetRequest.CreatePetDto pet;
     }
+
+
 
     @Data
     @NoArgsConstructor
@@ -75,5 +90,13 @@ public class UserRequest{
         @NotNull
         private String username;
 
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class CoinDto {
+        @NotNull
+        private Long amount;
     }
 }

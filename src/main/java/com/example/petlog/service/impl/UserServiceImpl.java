@@ -11,8 +11,10 @@ import com.example.petlog.exception.ErrorCode;
 import com.example.petlog.repository.PetRepository;
 import com.example.petlog.repository.UserRepository;
 import com.example.petlog.security.jwt.UserInfoDetails;
+import com.example.petlog.service.ImageService;
 import com.example.petlog.service.PetService;
 import com.example.petlog.service.UserService;
+import com.example.petlog.util.Utils;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.validation.Valid;
@@ -23,9 +25,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.core.env.Environment;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.List;
 import java.util.Objects;
 import java.util.Date;
@@ -40,38 +47,50 @@ public class UserServiceImpl implements UserService {
     private final PetService petService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final ImageService imageService;
+    private final Utils utils;
     private final Environment env;
 
 
     @Override
     // 유저 생성
-    public UserResponse.CreateUserDto createUser(UserRequest.CreateUserDto request) {
+    public UserResponse.CreateUserDto createUser(List<MultipartFile> multipartFiles, UserRequest.CreateUserAndPetDto request) {
         // 비밀번호 암호화
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        String encodedPassword = passwordEncoder.encode(request.getUser().getPassword());
         //아이디 중복
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.getUser().getEmail())) {
             throw new BusinessException(ErrorCode.USER_ID_DUPLICATE);
         }
         //닉네임 중복
-        if (userRepository.existsByUsername(request.getUsername())) {
+        if (userRepository.existsByUsername(request.getUser().getUsername())) {
             throw new BusinessException(ErrorCode.USER_NAME_DUPLICATE);
         }
+        String userProfile = null;
+        if (multipartFiles != null && !multipartFiles.isEmpty()) {
+            List<MultipartFile> userProfiles = List.of(multipartFiles.get(0));
+            List<String> urls = imageService.upload(userProfiles);
+            userProfile = urls.get(0);
+        }
+
+        Integer age = utils.calculateAge(request.getUser().getBirth());
 
         User user = User.builder()
-                .email(request.getEmail())
-                .password(request.getPassword())
+                .email(request.getUser().getEmail())
+                .social(request.getUser().getSocial())
+                .password(request.getUser().getPassword())
                 .encryptedPwd(encodedPassword)
-                .profileImage(request.getProfileImage())
-                .genderType(request.getGenderType())
+                .profileImage(userProfile)
+                .genderType(request.getUser().getGenderType())
                 .petCoin(0L)
-                .age(request.getAge())
+                .birth(request.getUser().getBirth())
+                .age(age)
                 .type(UserType.USER)
-                .username(request.getUsername())
+                .username(request.getUser().getUsername())
                 .build();
         User savedUser = userRepository.save(user);
 
-        if (request.getPet()!= null) {
-            petService.createPet(savedUser.getId(), request.getPet());
+        if (request.getPet() != null) {
+            petService.createPet(multipartFiles.get(1), savedUser.getId(), request.getPet());
 
         }
         return UserResponse.CreateUserDto.fromEntity(savedUser);
@@ -175,5 +194,33 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return UserResponse.UpdateProfileDto.fromEntity(user);
     }
+
+    @Override
+    public UserResponse.CoinDto getCoin(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        return UserResponse.CoinDto.fromEntity(user);
+    }
+
+    @Override
+    public UserResponse.CoinDto earnCoin(Long userId, UserRequest.@Valid CoinDto request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        user.earnCoin(request.getAmount());
+        userRepository.save(user);
+        return UserResponse.CoinDto.fromEntity(user);
+
+    }
+
+    @Override
+    public UserResponse.CoinDto redeemCoin(Long userId, UserRequest.@Valid CoinDto request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        user.redeemCoin(user.getPetCoin(), request.getAmount());
+        userRepository.save(user);
+        return UserResponse.CoinDto.fromEntity(user);
+    }
+
+
 
 }
