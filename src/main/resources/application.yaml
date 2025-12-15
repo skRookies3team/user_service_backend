@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: petlog
+    name: user-service
 
   servlet:
     multipart:

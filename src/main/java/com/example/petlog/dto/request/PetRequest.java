@@ -7,7 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class PetRequest {
@@ -26,20 +28,15 @@ public class PetRequest {
         //성별
         @NotNull
         private GenderType genderType;
-        //나이
-        @NotNull
-        private Integer age;
         //생일
         @NotNull
-        private LocalDateTime birth;
+        private LocalDate birth;
         //종류
         @NotNull
         private Species species;
         //중성화여부
         @NotNull
         private boolean neutered;
-        //프로필 사진
-        private String profileImage;
 
     }
 
@@ -57,7 +54,7 @@ public class PetRequest {
         //나이
         private Integer age;
         //생일
-        private LocalDateTime birth;
+        private LocalDate birth;
         //종류
         private Species species;
         //중성화여부

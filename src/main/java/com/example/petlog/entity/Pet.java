@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -57,7 +58,7 @@ public class Pet {
 
     //생일
     @Column
-    private LocalDateTime birth;
+    private LocalDate birth;
 
     //상태
     @Enumerated(EnumType.STRING)
@@ -70,7 +71,7 @@ public class Pet {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    public void updatePet(String petName, String breed, GenderType genderType, Integer age, LocalDateTime birth, Species species, boolean neutered, String profileImage) {
+    public void updatePet(String petName, String breed, GenderType genderType, Integer age, LocalDate birth, Species species, boolean neutered, String profileImage) {
         this.petName = petName;
         this.breed = breed;
         this.genderType = genderType;
