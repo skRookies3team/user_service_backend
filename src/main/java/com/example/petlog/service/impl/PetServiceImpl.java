@@ -30,18 +30,22 @@ public class PetServiceImpl implements PetService {
 
     @Override
     // 펫 생성
-    public PetResponse.CreatePetDto createPet(MultipartFile multipartFile, Long userId, PetRequest.CreatePetDto request) {
+    public PetResponse.CreatePetDto createPet(MultipartFile petProfile, Long userId, PetRequest.CreatePetDto request) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         //펫 이름 중복
         if (petRepository.existsByUserIdAndPetName(userId, request.getPetName())) {
-            throw new BusinessException(ErrorCode.USER_ID_DUPLICATE);
+            throw new BusinessException(ErrorCode.PET_NAME_DUPLICATE);
         }
-        List<MultipartFile> petProfiles = List.of(multipartFile);
-        List<String> urls = imageService.upload(petProfiles);
-        String profileImage = urls.get(0);
+        String profileImage = null;
+        if (petProfile != null && !petProfile.isEmpty()) {
+            List<MultipartFile> petProfiles = List.of(petProfile);
+            List<String> urls = imageService.upload(petProfiles);
+            profileImage = urls.get(0);
+        }
+
         Integer age = utils.calculateAge(request.getBirth());
 
         Pet pet = Pet.builder()

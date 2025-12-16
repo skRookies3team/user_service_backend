@@ -25,6 +25,7 @@ public enum ErrorCode {
     USER_NOT_FOUND("USER_001","사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     USER_ID_DUPLICATE("USER_002","중복된 아이디입니다.", HttpStatus.BAD_REQUEST),
     USER_NAME_DUPLICATE("USER_002","중복된 이름입니다.", HttpStatus.BAD_REQUEST),
+    USER_SOCIAL_DUPLICATE("USER_004","중복된 소셜 아이디입니다.", HttpStatus.BAD_REQUEST),
     BIRTH_IS_NULL("USER_003","생일값이 존재하지 않니다.",HttpStatus.BAD_REQUEST),
 
     //펫 관련

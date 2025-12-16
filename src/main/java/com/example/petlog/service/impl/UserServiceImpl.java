@@ -55,22 +55,23 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     // 유저 생성
-    public UserResponse.CreateUserDto createUser(List<MultipartFile> multipartFiles, UserRequest.CreateUserAndPetDto request) {
+    public UserResponse.CreateUserDto createUser(MultipartFile userProfile, MultipartFile petProfile, UserRequest.CreateUserAndPetDto request) {
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(request.getUser().getPassword());
         //아이디 중복
         if (userRepository.existsByEmail(request.getUser().getEmail())) {
             throw new BusinessException(ErrorCode.USER_ID_DUPLICATE);
         }
-        //닉네임 중복
-        if (userRepository.existsByUsername(request.getUser().getUsername())) {
-            throw new BusinessException(ErrorCode.USER_NAME_DUPLICATE);
+        //소셜 아이디 중복
+        if (userRepository.existsBySocial(request.getUser().getSocial())) {
+            throw new BusinessException(ErrorCode.USER_SOCIAL_DUPLICATE);
         }
-        String userProfile = null;
-        if (multipartFiles != null && !multipartFiles.isEmpty()) {
-            List<MultipartFile> userProfiles = List.of(multipartFiles.get(0));
+
+        String profileImage = null;
+        if (userProfile != null && !userProfile.isEmpty()) {
+            List<MultipartFile> userProfiles = List.of(userProfile);
             List<String> urls = imageService.upload(userProfiles);
-            userProfile = urls.get(0);
+            profileImage = urls.get(0);
         }
 
         Integer age = utils.calculateAge(request.getUser().getBirth());
@@ -80,7 +81,7 @@ public class UserServiceImpl implements UserService {
                 .social(request.getUser().getSocial())
                 .password(request.getUser().getPassword())
                 .encryptedPwd(encodedPassword)
-                .profileImage(userProfile)
+                .profileImage(profileImage)
                 .genderType(request.getUser().getGenderType())
                 .petCoin(0L)
                 .birth(request.getUser().getBirth())
@@ -91,7 +92,7 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(user);
 
         if (request.getPet() != null) {
-            petService.createPet(multipartFiles.get(1), savedUser.getId(), request.getPet());
+            petService.createPet(petProfile, savedUser.getId(), request.getPet());
 
         }
         return UserResponse.CreateUserDto.fromEntity(savedUser);
