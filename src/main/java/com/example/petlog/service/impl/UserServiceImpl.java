@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
         return UserResponse.CreateUserDto.fromEntity(savedUser);
     }
 
-
+    @Transactional(readOnly = true)
     @Override
     public UserResponse.AuthDto getUserDetailsByUserId(String email) {
         User user = userRepository.findByEmail(email)
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
 
         return UserResponse.AuthDto.fromEntity(user);
     }
-
+    @Transactional
     @Override
     public UserResponse.LoginDto login(UserRequest.LoginDto authRequest) {
         // 1. AuthenticationManager를 사용하여 사용자 인증 시도
@@ -128,6 +128,7 @@ public class UserServiceImpl implements UserService {
 
 
     }
+    @Transactional
     //jwt 토큰 생성 메서드
     private String generateJwtToken(UserResponse.AuthDto userDetails) {
         // 환경 변수에서 Secret Key와 만료 시간 가져오기

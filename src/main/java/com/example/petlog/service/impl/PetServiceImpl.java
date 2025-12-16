@@ -15,6 +15,7 @@ import com.example.petlog.util.Utils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class PetServiceImpl implements PetService {
     private final ImageService imageService;
     private final Utils utils;
 
+    @Transactional
     @Override
     // 펫 생성
     public PetResponse.CreatePetDto createPet(MultipartFile petProfile, Long userId, PetRequest.CreatePetDto request) {
@@ -66,7 +68,7 @@ public class PetServiceImpl implements PetService {
 
     }
 
-
+    @Transactional
     @Override
     public PetResponse.UpdatePetDto updatePet(Long petId, PetRequest.@Valid UpdatePetDto request) {
         Pet pet = petRepository.findById(petId)
@@ -84,14 +86,14 @@ public class PetServiceImpl implements PetService {
         petRepository.save(pet);
         return PetResponse.UpdatePetDto.fromEntity(pet);
     }
-
+    @Transactional(readOnly = true)
     @Override
     public PetResponse.GetPetDto getPet(Long petId) {
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PET_NOT_FOUND));
         return PetResponse.GetPetDto.fromEntity(pet);
     }
-
+    @Transactional
     @Override
     public void deletePet(Long petId) {
         Pet pet = petRepository.findById(petId)
@@ -99,7 +101,7 @@ public class PetServiceImpl implements PetService {
         petRepository.delete(pet);
 
     }
-
+    @Transactional
     @Override
     public void lostPet(Long petId) {
         Pet pet = petRepository.findById(petId)
