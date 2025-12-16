@@ -24,8 +24,8 @@ public class UserController {
 
 
     @PostMapping(value = "/signup",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<UserResponse.CreateUserDto> createUser(@RequestPart(value = "multipartFile", required = false) List<MultipartFile> multipartFile, @Valid @RequestPart("request") UserRequest.CreateUserAndPetDto request) {
-        return ResponseEntity.ok(userService.createUser(multipartFile, request));
+    public ResponseEntity<UserResponse.CreateUserDto> createUser(@RequestPart(value = "userProfile", required = false) MultipartFile userProfile,@RequestPart(value = "petProfile", required = false)MultipartFile petProfile,  @Valid @RequestPart("request") UserRequest.CreateUserAndPetDto request) {
+        return ResponseEntity.ok(userService.createUser(userProfile,petProfile, request));
     }
 
     @Operation(summary = "회원 정보 수정", description = "현재 로그인된 사용자 정보를 수정합니다.")

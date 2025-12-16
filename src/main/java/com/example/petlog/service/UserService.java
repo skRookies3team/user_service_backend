@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface UserService {
 
-    UserResponse.CreateUserDto createUser(List<MultipartFile> multipartFiles, UserRequest.CreateUserAndPetDto request);
+    UserResponse.CreateUserDto createUser(MultipartFile userProfile, MultipartFile petProfile, UserRequest.CreateUserAndPetDto request);
     UserResponse.LoginDto login(UserRequest.LoginDto authRequest);
     UserResponse.AuthDto getUserDetailsByUserId(String userId);
 

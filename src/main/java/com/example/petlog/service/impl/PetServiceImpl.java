@@ -15,6 +15,7 @@ import com.example.petlog.util.Utils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -28,20 +29,25 @@ public class PetServiceImpl implements PetService {
     private final ImageService imageService;
     private final Utils utils;
 
+    @Transactional
     @Override
     // 펫 생성
-    public PetResponse.CreatePetDto createPet(MultipartFile multipartFile, Long userId, PetRequest.CreatePetDto request) {
+    public PetResponse.CreatePetDto createPet(MultipartFile petProfile, Long userId, PetRequest.CreatePetDto request) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         //펫 이름 중복
         if (petRepository.existsByUserIdAndPetName(userId, request.getPetName())) {
-            throw new BusinessException(ErrorCode.USER_ID_DUPLICATE);
+            throw new BusinessException(ErrorCode.PET_NAME_DUPLICATE);
         }
-        List<MultipartFile> petProfiles = List.of(multipartFile);
-        List<String> urls = imageService.upload(petProfiles);
-        String profileImage = urls.get(0);
+        String profileImage = null;
+        if (petProfile != null && !petProfile.isEmpty()) {
+            List<MultipartFile> petProfiles = List.of(petProfile);
+            List<String> urls = imageService.upload(petProfiles);
+            profileImage = urls.get(0);
+        }
+
         Integer age = utils.calculateAge(request.getBirth());
 
         Pet pet = Pet.builder()
@@ -62,7 +68,7 @@ public class PetServiceImpl implements PetService {
 
     }
 
-
+    @Transactional
     @Override
     public PetResponse.UpdatePetDto updatePet(Long petId, PetRequest.@Valid UpdatePetDto request) {
         Pet pet = petRepository.findById(petId)
@@ -80,14 +86,14 @@ public class PetServiceImpl implements PetService {
         petRepository.save(pet);
         return PetResponse.UpdatePetDto.fromEntity(pet);
     }
-
+    @Transactional(readOnly = true)
     @Override
     public PetResponse.GetPetDto getPet(Long petId) {
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PET_NOT_FOUND));
         return PetResponse.GetPetDto.fromEntity(pet);
     }
-
+    @Transactional
     @Override
     public void deletePet(Long petId) {
         Pet pet = petRepository.findById(petId)
@@ -95,7 +101,7 @@ public class PetServiceImpl implements PetService {
         petRepository.delete(pet);
 
     }
-
+    @Transactional
     @Override
     public void lostPet(Long petId) {
         Pet pet = petRepository.findById(petId)

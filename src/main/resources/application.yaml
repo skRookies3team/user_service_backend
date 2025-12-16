@@ -37,3 +37,7 @@ springdoc:
     path: "${SWAGGER_DOCS}"
   swagger-ui:
     path: "${SWAGGER_UI}"
+
+logging:
+  level:
+    org.springframework.transaction.interceptor: TRACE
