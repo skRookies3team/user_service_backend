@@ -21,7 +21,7 @@ public class PetController {
 
     @Operation(summary = "펫 등록", description = "새로운 펫을 등록합니다.")
     @PostMapping(value = "/create" ,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<PetResponse.CreatePetDto> createPet(@RequestPart(value = "multipartFile") MultipartFile multipartFile, @RequestHeader("X-USER-ID") Long userId, @Valid @RequestPart PetRequest.CreatePetDto request) {
+    public ResponseEntity<PetResponse.CreatePetDto> createPet(@RequestPart(value = "multipartFile",required = false) MultipartFile multipartFile, @RequestHeader("X-USER-ID") Long userId, @Valid @RequestPart PetRequest.CreatePetDto request) {
         return ResponseEntity.ok(petService.createPet(multipartFile, userId, request));
     }
 
