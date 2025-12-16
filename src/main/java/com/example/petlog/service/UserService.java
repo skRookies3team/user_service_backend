@@ -27,4 +27,6 @@ public interface UserService {
     UserResponse.CoinDto earnCoin(Long userId, UserRequest.@Valid CoinDto request);
 
     UserResponse.CoinDto redeemCoin(Long userId, UserRequest.@Valid CoinDto request);
+
+    UserResponse.GetSearchedUserDtoList searchUsersWithSocial(String keyword);
 }

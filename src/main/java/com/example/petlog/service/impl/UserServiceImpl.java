@@ -25,6 +25,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.core.env.Environment;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.crypto.SecretKey;
@@ -51,7 +52,7 @@ public class UserServiceImpl implements UserService {
     private final Utils utils;
     private final Environment env;
 
-
+    @Transactional
     @Override
     // 유저 생성
     public UserResponse.CreateUserDto createUser(List<MultipartFile> multipartFiles, UserRequest.CreateUserAndPetDto request) {
@@ -145,7 +146,7 @@ public class UserServiceImpl implements UserService {
                 .signWith(secretKey)
                 .compact();
     }
-
+    @Transactional(readOnly = true)
     @Override
     // 유저 정보, 반려견 정보 반환
     public UserResponse.GetUserDto getUser(Long userId) {
@@ -158,7 +159,7 @@ public class UserServiceImpl implements UserService {
 
         return UserResponse.GetUserDto.fromEntity(user,petList);
     }
-
+    @Transactional
     @Override
     public UserResponse.UpdateUserDto updateUser(Long userId, UserRequest.UpdateUserDto request) {
         User user = userRepository.findById(userId)
@@ -174,14 +175,14 @@ public class UserServiceImpl implements UserService {
         return UserResponse.UpdateUserDto.fromEntity(user);
 
     }
-
+    @Transactional
     @Override
     public void deleteUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         userRepository.delete(user);
     }
-
+    @Transactional
     @Override
     public UserResponse.UpdateProfileDto updateProfile(Long userId, UserRequest.@Valid UpdateProfileDto request) {
         User user = userRepository.findById(userId)
@@ -194,14 +195,14 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return UserResponse.UpdateProfileDto.fromEntity(user);
     }
-
+    @Transactional
     @Override
     public UserResponse.CoinDto getCoin(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         return UserResponse.CoinDto.fromEntity(user);
     }
-
+    @Transactional
     @Override
     public UserResponse.CoinDto earnCoin(Long userId, UserRequest.@Valid CoinDto request) {
         User user = userRepository.findById(userId)
@@ -211,7 +212,7 @@ public class UserServiceImpl implements UserService {
         return UserResponse.CoinDto.fromEntity(user);
 
     }
-
+    @Transactional
     @Override
     public UserResponse.CoinDto redeemCoin(Long userId, UserRequest.@Valid CoinDto request) {
         User user = userRepository.findById(userId)
@@ -221,6 +222,13 @@ public class UserServiceImpl implements UserService {
         return UserResponse.CoinDto.fromEntity(user);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public UserResponse.GetSearchedUserDtoList searchUsersWithSocial(String keyword) {
+        List<User> users = userRepository.findBySocialContaining(keyword);
+        return UserResponse.GetSearchedUserDtoList.fromEntity(users);
+
+    }
 
 
 }

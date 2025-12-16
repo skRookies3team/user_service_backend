@@ -86,4 +86,10 @@ public class UserController {
     public ResponseEntity<UserResponse.CoinDto> redeemCoin(@PathVariable("id") Long userId, @Valid @RequestBody UserRequest.CoinDto request) {
         return ResponseEntity.ok(userService.redeemCoin(userId, request));
     }
+
+    @Operation(summary = "사용자 검색", description = "소셜 아이디로 사용자를 검색합니다.")
+    @GetMapping("/search")
+    public ResponseEntity<UserResponse.GetSearchedUserDtoList> searchUsersWithSocial(@RequestParam("keyword") String keyword) {
+        return ResponseEntity.ok(userService.searchUsersWithSocial(keyword));
+    }
 }
