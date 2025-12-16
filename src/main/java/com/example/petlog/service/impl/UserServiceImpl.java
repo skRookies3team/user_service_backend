@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
     private final ImageService imageService;
     private final Utils utils;
     private final Environment env;
+    private final String userBaseUrl = "https://petlog-images-bucket.s3.ap-northeast-2.amazonaws.com/af4bbf57-a_%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202025-12-16%20161002.png";
 
     @Transactional
     @Override
@@ -67,7 +68,7 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(ErrorCode.USER_SOCIAL_DUPLICATE);
         }
 
-        String profileImage = null;
+        String profileImage = userBaseUrl;
         if (userProfile != null && !userProfile.isEmpty()) {
             List<MultipartFile> userProfiles = List.of(userProfile);
             List<String> urls = imageService.upload(userProfiles);

@@ -28,7 +28,7 @@ public class PetServiceImpl implements PetService {
     private final PetRepository petRepository;
     private final ImageService imageService;
     private final Utils utils;
-
+    private final String petBaseUrl = "https://petlog-images-bucket.s3.ap-northeast-2.amazonaws.com/7593d55c-0_%ED%8E%AB%EA%B8%B0%EB%B3%B8%ED%94%84%EB%A1%9C%ED%95%84.jpg";
     @Transactional
     @Override
     // 펫 생성
@@ -41,7 +41,7 @@ public class PetServiceImpl implements PetService {
         if (petRepository.existsByUserIdAndPetName(userId, request.getPetName())) {
             throw new BusinessException(ErrorCode.PET_NAME_DUPLICATE);
         }
-        String profileImage = null;
+        String profileImage = petBaseUrl;
         if (petProfile != null && !petProfile.isEmpty()) {
             List<MultipartFile> petProfiles = List.of(petProfile);
             List<String> urls = imageService.upload(petProfiles);
