@@ -205,5 +205,61 @@ public class UserResponse {
 
     }
 
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class GetSearchedUserDto {
+        //사용자 id
+        Long userId;
+        //사용자 이름(닉네임)
+        private String username;
+        //성별
+        private GenderType genderType;
+        //프로필 사진
+        private String profileImage;
+        //소설
+        private String social;
+        //상태메세지
+        private String statusMessage;
+        //나이
+        private Integer age;
+
+        public static GetSearchedUserDto fromEntity(User user) {
+
+            return GetSearchedUserDto.builder()
+                    .userId(user.getId())
+                    .statusMessage(user.getStatusMessage())
+                    .username(user.getUsername())
+                    .social(user.getSocial())
+                    .genderType(user.getGenderType())
+                    .profileImage(user.getProfileImage())
+                    .age(user.getAge())
+                    .build();
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class GetSearchedUserDtoList {
+
+        //사용자 이름(닉네임)
+        boolean isNull;
+        private List<GetSearchedUserDto> users;
+
+        public static GetSearchedUserDtoList fromEntity(List<User> users) {
+            boolean isEmpty = users.isEmpty();
+            List<GetSearchedUserDto> getSearchedUserDtoList = users.stream()
+                    .map(user -> GetSearchedUserDto.fromEntity(user))
+                    .toList();
+            return GetSearchedUserDtoList.builder()
+                    .users(getSearchedUserDtoList)
+                    .isNull(isEmpty)
+                    .build();
+        }
+    }
+
 
 }
