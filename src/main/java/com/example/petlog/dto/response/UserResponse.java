@@ -246,7 +246,7 @@ public class UserResponse {
     public static class GetSearchedUserDtoList {
 
         //사용자 이름(닉네임)
-        boolean isNull;
+        boolean isEmpty;
         private List<GetSearchedUserDto> users;
 
         public static GetSearchedUserDtoList fromEntity(List<User> users) {
@@ -256,7 +256,7 @@ public class UserResponse {
                     .toList();
             return GetSearchedUserDtoList.builder()
                     .users(getSearchedUserDtoList)
-                    .isNull(isEmpty)
+                    .isEmpty(isEmpty)
                     .build();
         }
     }
