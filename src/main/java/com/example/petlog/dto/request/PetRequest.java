@@ -1,8 +1,7 @@
 package com.example.petlog.dto.request;
 
 
-import com.example.petlog.entity.GenderType;
-import com.example.petlog.entity.Species;
+import com.example.petlog.entity.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,7 +36,25 @@ public class PetRequest {
         //중성화여부
         @NotNull
         private boolean neutered;
+        //예방접종 여부
+        @NotNull
+        private boolean vaccinated;
 
+        public static Pet toEntity(User user, CreatePetDto request, Integer age, String profileImage) {
+            return Pet.builder()
+                    .user(user)
+                    .petName(request.getPetName())
+                    .genderType(request.getGenderType())
+                    .breed(request.getBreed())
+                    .age(age)
+                    .status(Status.ALIVE)
+                    .birth(request.getBirth())
+                    .species(request.getSpecies())
+                    .neutered(request.isNeutered())
+                    .profileImage(profileImage)
+                    .isVaccinated(request.isVaccinated())
+                    .build();
+        }
     }
 
     @Getter
@@ -59,8 +76,7 @@ public class PetRequest {
         private Species species;
         //중성화여부
         private boolean neutered;
-        //프로필 사진
-        private String profileImage;
-
+        //예방접종 여부
+        private boolean vaccinated;
     }
 }

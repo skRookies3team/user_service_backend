@@ -105,10 +105,10 @@ public class User {
         this.genderType = genderType;
     }
 
-    public void updateProfile(String username,String profileImage,String statusMessage) {
+    public void updateProfile(String username,String profileImage,String social) {
         this.username = username;
         this.profileImage = profileImage;
-        this.statusMessage = statusMessage;
+        this.social = social;
     }
 
     public void earnCoin(Long amount) {

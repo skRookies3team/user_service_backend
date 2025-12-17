@@ -20,7 +20,7 @@ public interface UserService {
 
     void deleteUser(Long userId);
 
-    UserResponse.UpdateProfileDto updateProfile(Long userId, UserRequest.@Valid UpdateProfileDto request);
+    UserResponse.UpdateProfileDto updateProfile(Long userId, MultipartFile userProfile, UserRequest.UpdateProfileDto request);
 
     UserResponse.CoinDto getCoin(Long userId);
 

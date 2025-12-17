@@ -9,7 +9,7 @@ public interface PetService {
 
     PetResponse.CreatePetDto createPet(MultipartFile multipartFile, Long userNum, PetRequest.CreatePetDto request);
 
-    PetResponse.UpdatePetDto updatePet(Long petId, PetRequest.UpdatePetDto request);
+    PetResponse.UpdatePetDto updatePet(Long userId, MultipartFile multipartFile, Long petId, PetRequest.UpdatePetDto request);
 
     PetResponse.GetPetDto getPet(Long petId);
 
