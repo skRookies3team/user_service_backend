@@ -177,15 +177,15 @@ public class UserResponse {
         private String username;
         //프로필 사진
         private String profileImage;
-        //상태메세지
-        private String statusMessage;
+        //소설아이디
+        private String social;
 
         public static UpdateProfileDto fromEntity(User user) {
 
             return UpdateProfileDto.builder()
                     .username(user.getUsername())
                     .profileImage(user.getProfileImage())
-                    .statusMessage(user.getStatusMessage())
+                    .social(user.getSocial())
                     .build();
         }
     }

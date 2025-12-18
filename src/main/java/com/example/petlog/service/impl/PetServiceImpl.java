@@ -50,18 +50,7 @@ public class PetServiceImpl implements PetService {
 
         Integer age = utils.calculateAge(request.getBirth());
 
-        Pet pet = Pet.builder()
-                .user(user)
-                .petName(request.getPetName())
-                .genderType(request.getGenderType())
-                .breed(request.getBreed())
-                .age(age)
-                .status(Status.ALIVE)
-                .birth(request.getBirth())
-                .species(request.getSpecies())
-                .neutered(request.isNeutered())
-                .profileImage(profileImage)
-                .build();
+        Pet pet = PetRequest.CreatePetDto.toEntity(user, request, age, profileImage);
         Pet savedPet = petRepository.save(pet);
         return PetResponse.CreatePetDto.fromEntity(savedPet);
 
@@ -70,9 +59,23 @@ public class PetServiceImpl implements PetService {
 
     @Transactional
     @Override
-    public PetResponse.UpdatePetDto updatePet(Long petId, PetRequest.@Valid UpdatePetDto request) {
+    public PetResponse.UpdatePetDto updatePet(Long userId, MultipartFile petProfile, Long petId, PetRequest.@Valid UpdatePetDto request) {
+
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PET_NOT_FOUND));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        //펫 이름 중복
+        if (petRepository.existsByUserIdAndPetName(userId, request.getPetName()) && !pet.getPetName().equals(pet.getPetName())) {
+            throw new BusinessException(ErrorCode.PET_NAME_DUPLICATE);
+        }
+        String profileImage = pet.getProfileImage();
+        if (petProfile != null && !petProfile.isEmpty()) {
+            List<MultipartFile> petProfiles = List.of(petProfile);
+            List<String> urls = imageService.upload(petProfiles);
+            profileImage = urls.get(0);
+        }
+
         pet.updatePet(
                 request.getPetName(),
                 request.getBreed(),
@@ -81,7 +84,8 @@ public class PetServiceImpl implements PetService {
                 request.getBirth(),
                 request.getSpecies(),
                 request.isNeutered(),
-                request.getProfileImage()
+                profileImage,
+                request.isVaccinated()
         );
         petRepository.save(pet);
         return PetResponse.UpdatePetDto.fromEntity(pet);

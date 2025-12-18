@@ -187,13 +187,21 @@ public class UserServiceImpl implements UserService {
     }
     @Transactional
     @Override
-    public UserResponse.UpdateProfileDto updateProfile(Long userId, UserRequest.@Valid UpdateProfileDto request) {
+    public UserResponse.UpdateProfileDto updateProfile(Long userId,MultipartFile userProfile, UserRequest.UpdateProfileDto request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        String profileImage = user.getProfileImage();
+        if (userProfile != null && !userProfile.isEmpty()) {
+            List<MultipartFile> userProfiles = List.of(userProfile);
+            List<String> urls = imageService.upload(userProfiles);
+            profileImage = urls.get(0);
+        }
+
         user.updateProfile(
                 request.getUsername(),
-                request.getProfileImage(),
-                request.getStatusMessage()
+                profileImage,
+                request.getSocial()
         );
         userRepository.save(user);
         return UserResponse.UpdateProfileDto.fromEntity(user);

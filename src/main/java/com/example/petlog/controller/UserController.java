@@ -64,9 +64,9 @@ public class UserController {
     }
 
     @Operation(summary = "프로필 수정", description = "현재 로그인된 사용자의 프로필 정보를 수정합니다.")
-    @PatchMapping("/me")
-    public ResponseEntity<UserResponse.UpdateProfileDto> updateProfile(@RequestHeader("X-USER-ID") Long userId, @Valid @RequestBody UserRequest.UpdateProfileDto request) {
-        return ResponseEntity.ok(userService.updateProfile(userId, request));
+    @PatchMapping(value= "/me",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UserResponse.UpdateProfileDto> updateProfile(@RequestHeader("X-USER-ID") Long userId, @RequestPart(value = "userProfile", required = false) MultipartFile userProfile, @Valid @RequestPart("request") UserRequest.UpdateProfileDto request) {
+        return ResponseEntity.ok(userService.updateProfile(userId, userProfile, request));
     }
 
     @Operation(summary = "코인 수량 조회", description = "특정 ID의 사용자 코인 수량을 조회합니다.")

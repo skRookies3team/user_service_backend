@@ -82,13 +82,9 @@ public class UserRequest{
     public static class UpdateProfileDto {
 
         @NotNull
-        private String statusMessage;
-
-        @NotNull
-        private String profileImage;
-
-        @NotNull
         private String username;
+        @NotNull
+        private String social;
 
     }
 

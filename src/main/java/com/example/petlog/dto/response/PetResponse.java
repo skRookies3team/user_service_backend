@@ -38,6 +38,8 @@ public class PetResponse {
         private LocalDate birth;
         //상태
         private Status status;
+        //예방접종
+        private boolean vaccinated;
         //생성일
         private LocalDateTime createdAt;
 
@@ -55,6 +57,7 @@ public class PetResponse {
                     .neutered(pet.isNeutered())
                     .birth(pet.getBirth())
                     .status(pet.getStatus())
+                    .vaccinated(pet.isVaccinated())
                     .createdAt(pet.getCreatedAt())
                     .build();
         }
@@ -76,7 +79,7 @@ public class PetResponse {
         //성별
         private GenderType genderType;
         //중성화여부
-        private boolean is_neutered;
+        private boolean neutered;
         //프로필 사진
         private String profileImage;
         //나이
@@ -85,6 +88,8 @@ public class PetResponse {
         private LocalDate birth;
         //상태
         private Status status;
+        //예방접종
+        private boolean vaccinated;
 
 
         public static PetResponse.GetPetDto fromEntity(Pet pet) {
@@ -95,11 +100,12 @@ public class PetResponse {
                     .species(pet.getSpecies())
                     .breed(pet.getBreed())
                     .genderType(pet.getGenderType())
-                    .is_neutered(pet.isNeutered())
+                    .neutered(pet.isNeutered())
                     .profileImage(pet.getProfileImage())
                     .age(pet.getAge())
                     .birth(pet.getBirth())
                     .status(pet.getStatus())
+                    .vaccinated(pet.isVaccinated())
                     .build();
         }
 
@@ -129,7 +135,8 @@ public class PetResponse {
         private LocalDate birth;
         //상태
         private Status status;
-
+        //예방접종
+        private boolean vaccinated;
 
         public static PetResponse.UpdatePetDto fromEntity(Pet pet) {
 
@@ -144,6 +151,7 @@ public class PetResponse {
                     .age(pet.getAge())
                     .birth(pet.getBirth())
                     .status(pet.getStatus())
+                    .vaccinated(pet.isVaccinated())
                     .build();
         }
 

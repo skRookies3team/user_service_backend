@@ -64,6 +64,10 @@ public class Pet {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    //예방접종 여부
+    @Column(nullable = false)
+    private boolean isVaccinated;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -71,7 +75,7 @@ public class Pet {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    public void updatePet(String petName, String breed, GenderType genderType, Integer age, LocalDate birth, Species species, boolean neutered, String profileImage) {
+    public void updatePet(String petName, String breed, GenderType genderType, Integer age, LocalDate birth, Species species, boolean neutered, String profileImage, boolean vaccinated) {
         this.petName = petName;
         this.breed = breed;
         this.genderType = genderType;
@@ -80,7 +84,7 @@ public class Pet {
         this.species = species;
         this.neutered = neutered;
         this.profileImage = profileImage;
-
+        this.isVaccinated = vaccinated;
     }
 
     public void lostPet() {
