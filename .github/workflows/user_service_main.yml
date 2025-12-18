@@ -47,7 +47,7 @@ jobs:
 
       - name: Update image tag in values.yaml
         run: |
-          cd manifest/user-service
+          cd manifest/charts/user-service
           sed -i "s|tag:.*|tag: user-service-${{ github.sha }}|" values.yaml
 
       - name: Commit & Push manifest repo
