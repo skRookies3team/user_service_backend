@@ -40,6 +40,13 @@ public class SecurityConfig {
 
                 // 요청별 권한 설정
                 .authorizeHttpRequests(auth -> auth
+
+                        // Kubernetes 헬스체크 허용
+                        .requestMatchers(
+                                "/actuator/health",
+                                "/actuator/health/**"
+                        ).permitAll()
+
                         // 회원가입, 로그인 허용
                         .requestMatchers("/api/users/create").permitAll()
                         .requestMatchers("/api/users/login").permitAll()
