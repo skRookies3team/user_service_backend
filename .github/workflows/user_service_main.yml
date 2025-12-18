@@ -41,7 +41,7 @@ jobs:
       - name: Checkout manifest repo
         uses: actions/checkout@v4
         with:
-          repository: skRookies3team/mainifest_repo
+          repository: skRookies3team/manifest_repo
           token: ${{ secrets.MANIFEST_REPO_TOKEN }}
           path: manifest
 
