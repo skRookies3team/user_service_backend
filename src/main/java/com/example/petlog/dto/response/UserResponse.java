@@ -177,15 +177,15 @@ public class UserResponse {
         private String username;
         //프로필 사진
         private String profileImage;
-        //상태메세지
-        private String statusMessage;
+        //소설아이디
+        private String social;
 
         public static UpdateProfileDto fromEntity(User user) {
 
             return UpdateProfileDto.builder()
                     .username(user.getUsername())
                     .profileImage(user.getProfileImage())
-                    .statusMessage(user.getStatusMessage())
+                    .social(user.getSocial())
                     .build();
         }
     }
@@ -203,6 +203,62 @@ public class UserResponse {
                     .build();
         }
 
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class GetSearchedUserDto {
+        //사용자 id
+        Long userId;
+        //사용자 이름(닉네임)
+        private String username;
+        //성별
+        private GenderType genderType;
+        //프로필 사진
+        private String profileImage;
+        //소설
+        private String social;
+        //상태메세지
+        private String statusMessage;
+        //나이
+        private Integer age;
+
+        public static GetSearchedUserDto fromEntity(User user) {
+
+            return GetSearchedUserDto.builder()
+                    .userId(user.getId())
+                    .statusMessage(user.getStatusMessage())
+                    .username(user.getUsername())
+                    .social(user.getSocial())
+                    .genderType(user.getGenderType())
+                    .profileImage(user.getProfileImage())
+                    .age(user.getAge())
+                    .build();
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class GetSearchedUserDtoList {
+
+        //사용자 이름(닉네임)
+        boolean isEmpty;
+        private List<GetSearchedUserDto> users;
+
+        public static GetSearchedUserDtoList fromEntity(List<User> users) {
+            boolean isEmpty = users.isEmpty();
+            List<GetSearchedUserDto> getSearchedUserDtoList = users.stream()
+                    .map(user -> GetSearchedUserDto.fromEntity(user))
+                    .toList();
+            return GetSearchedUserDtoList.builder()
+                    .users(getSearchedUserDtoList)
+                    .isEmpty(isEmpty)
+                    .build();
+        }
     }
 
 

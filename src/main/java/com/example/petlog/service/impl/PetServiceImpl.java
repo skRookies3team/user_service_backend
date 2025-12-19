@@ -15,6 +15,7 @@ import com.example.petlog.util.Utils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -27,46 +28,54 @@ public class PetServiceImpl implements PetService {
     private final PetRepository petRepository;
     private final ImageService imageService;
     private final Utils utils;
-
+    private final String petBaseUrl = "https://petlog-images-bucket.s3.ap-northeast-2.amazonaws.com/7593d55c-0_%ED%8E%AB%EA%B8%B0%EB%B3%B8%ED%94%84%EB%A1%9C%ED%95%84.jpg";
+    @Transactional
     @Override
     // 펫 생성
-    public PetResponse.CreatePetDto createPet(MultipartFile multipartFile, Long userId, PetRequest.CreatePetDto request) {
+    public PetResponse.CreatePetDto createPet(MultipartFile petProfile, Long userId, PetRequest.CreatePetDto request) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         //펫 이름 중복
         if (petRepository.existsByUserIdAndPetName(userId, request.getPetName())) {
-            throw new BusinessException(ErrorCode.USER_ID_DUPLICATE);
+            throw new BusinessException(ErrorCode.PET_NAME_DUPLICATE);
         }
-        List<MultipartFile> petProfiles = List.of(multipartFile);
-        List<String> urls = imageService.upload(petProfiles);
-        String profileImage = urls.get(0);
+        String profileImage = petBaseUrl;
+        if (petProfile != null && !petProfile.isEmpty()) {
+            List<MultipartFile> petProfiles = List.of(petProfile);
+            List<String> urls = imageService.upload(petProfiles);
+            profileImage = urls.get(0);
+        }
+
         Integer age = utils.calculateAge(request.getBirth());
 
-        Pet pet = Pet.builder()
-                .user(user)
-                .petName(request.getPetName())
-                .genderType(request.getGenderType())
-                .breed(request.getBreed())
-                .age(age)
-                .status(Status.ALIVE)
-                .birth(request.getBirth())
-                .species(request.getSpecies())
-                .neutered(request.isNeutered())
-                .profileImage(profileImage)
-                .build();
+        Pet pet = PetRequest.CreatePetDto.toEntity(user, request, age, profileImage);
         Pet savedPet = petRepository.save(pet);
         return PetResponse.CreatePetDto.fromEntity(savedPet);
 
 
     }
 
-
+    @Transactional
     @Override
-    public PetResponse.UpdatePetDto updatePet(Long petId, PetRequest.@Valid UpdatePetDto request) {
+    public PetResponse.UpdatePetDto updatePet(Long userId, MultipartFile petProfile, Long petId, PetRequest.@Valid UpdatePetDto request) {
+
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PET_NOT_FOUND));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        //펫 이름 중복
+        if (petRepository.existsByUserIdAndPetName(userId, request.getPetName()) && !pet.getPetName().equals(pet.getPetName())) {
+            throw new BusinessException(ErrorCode.PET_NAME_DUPLICATE);
+        }
+        String profileImage = pet.getProfileImage();
+        if (petProfile != null && !petProfile.isEmpty()) {
+            List<MultipartFile> petProfiles = List.of(petProfile);
+            List<String> urls = imageService.upload(petProfiles);
+            profileImage = urls.get(0);
+        }
+
         pet.updatePet(
                 request.getPetName(),
                 request.getBreed(),
@@ -75,19 +84,20 @@ public class PetServiceImpl implements PetService {
                 request.getBirth(),
                 request.getSpecies(),
                 request.isNeutered(),
-                request.getProfileImage()
+                profileImage,
+                request.isVaccinated()
         );
         petRepository.save(pet);
         return PetResponse.UpdatePetDto.fromEntity(pet);
     }
-
+    @Transactional(readOnly = true)
     @Override
     public PetResponse.GetPetDto getPet(Long petId) {
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PET_NOT_FOUND));
         return PetResponse.GetPetDto.fromEntity(pet);
     }
-
+    @Transactional
     @Override
     public void deletePet(Long petId) {
         Pet pet = petRepository.findById(petId)
@@ -95,7 +105,7 @@ public class PetServiceImpl implements PetService {
         petRepository.delete(pet);
 
     }
-
+    @Transactional
     @Override
     public void lostPet(Long petId) {
         Pet pet = petRepository.findById(petId)

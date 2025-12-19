@@ -24,8 +24,8 @@ public class UserController {
 
 
     @PostMapping(value = "/signup",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<UserResponse.CreateUserDto> createUser(@RequestPart(value = "multipartFile", required = false) List<MultipartFile> multipartFile, @Valid @RequestPart("request") UserRequest.CreateUserAndPetDto request) {
-        return ResponseEntity.ok(userService.createUser(multipartFile, request));
+    public ResponseEntity<UserResponse.CreateUserDto> createUser(@RequestPart(value = "userProfile", required = false) MultipartFile userProfile,@RequestPart(value = "petProfile", required = false)MultipartFile petProfile,  @Valid @RequestPart("request") UserRequest.CreateUserAndPetDto request) {
+        return ResponseEntity.ok(userService.createUser(userProfile,petProfile, request));
     }
 
     @Operation(summary = "회원 정보 수정", description = "현재 로그인된 사용자 정보를 수정합니다.")
@@ -64,9 +64,9 @@ public class UserController {
     }
 
     @Operation(summary = "프로필 수정", description = "현재 로그인된 사용자의 프로필 정보를 수정합니다.")
-    @PatchMapping("/me")
-    public ResponseEntity<UserResponse.UpdateProfileDto> updateProfile(@RequestHeader("X-USER-ID") Long userId, @Valid @RequestBody UserRequest.UpdateProfileDto request) {
-        return ResponseEntity.ok(userService.updateProfile(userId, request));
+    @PatchMapping(value= "/me",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UserResponse.UpdateProfileDto> updateProfile(@RequestHeader("X-USER-ID") Long userId, @RequestPart(value = "userProfile", required = false) MultipartFile userProfile, @Valid @RequestPart("request") UserRequest.UpdateProfileDto request) {
+        return ResponseEntity.ok(userService.updateProfile(userId, userProfile, request));
     }
 
     @Operation(summary = "코인 수량 조회", description = "특정 ID의 사용자 코인 수량을 조회합니다.")
@@ -85,5 +85,11 @@ public class UserController {
     @PostMapping("/{id}/coin/redeem")
     public ResponseEntity<UserResponse.CoinDto> redeemCoin(@PathVariable("id") Long userId, @Valid @RequestBody UserRequest.CoinDto request) {
         return ResponseEntity.ok(userService.redeemCoin(userId, request));
+    }
+
+    @Operation(summary = "사용자 검색", description = "소셜 아이디로 사용자를 검색합니다.")
+    @GetMapping("/search")
+    public ResponseEntity<UserResponse.GetSearchedUserDtoList> searchUsersWithSocial(@RequestParam("keyword") String keyword) {
+        return ResponseEntity.ok(userService.searchUsersWithSocial(keyword));
     }
 }

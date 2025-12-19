@@ -25,6 +25,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.core.env.Environment;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.crypto.SecretKey;
@@ -50,26 +51,28 @@ public class UserServiceImpl implements UserService {
     private final ImageService imageService;
     private final Utils utils;
     private final Environment env;
+    private final String userBaseUrl = "https://petlog-images-bucket.s3.ap-northeast-2.amazonaws.com/af4bbf57-a_%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202025-12-16%20161002.png";
 
-
+    @Transactional
     @Override
     // 유저 생성
-    public UserResponse.CreateUserDto createUser(List<MultipartFile> multipartFiles, UserRequest.CreateUserAndPetDto request) {
+    public UserResponse.CreateUserDto createUser(MultipartFile userProfile, MultipartFile petProfile, UserRequest.CreateUserAndPetDto request) {
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(request.getUser().getPassword());
         //아이디 중복
         if (userRepository.existsByEmail(request.getUser().getEmail())) {
             throw new BusinessException(ErrorCode.USER_ID_DUPLICATE);
         }
-        //닉네임 중복
-        if (userRepository.existsByUsername(request.getUser().getUsername())) {
-            throw new BusinessException(ErrorCode.USER_NAME_DUPLICATE);
+        //소셜 아이디 중복
+        if (userRepository.existsBySocial(request.getUser().getSocial())) {
+            throw new BusinessException(ErrorCode.USER_SOCIAL_DUPLICATE);
         }
-        String userProfile = null;
-        if (multipartFiles != null && !multipartFiles.isEmpty()) {
-            List<MultipartFile> userProfiles = List.of(multipartFiles.get(0));
+
+        String profileImage = userBaseUrl;
+        if (userProfile != null && !userProfile.isEmpty()) {
+            List<MultipartFile> userProfiles = List.of(userProfile);
             List<String> urls = imageService.upload(userProfiles);
-            userProfile = urls.get(0);
+            profileImage = urls.get(0);
         }
 
         Integer age = utils.calculateAge(request.getUser().getBirth());
@@ -79,7 +82,7 @@ public class UserServiceImpl implements UserService {
                 .social(request.getUser().getSocial())
                 .password(request.getUser().getPassword())
                 .encryptedPwd(encodedPassword)
-                .profileImage(userProfile)
+                .profileImage(profileImage)
                 .genderType(request.getUser().getGenderType())
                 .petCoin(0L)
                 .birth(request.getUser().getBirth())
@@ -90,13 +93,13 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(user);
 
         if (request.getPet() != null) {
-            petService.createPet(multipartFiles.get(1), savedUser.getId(), request.getPet());
+            petService.createPet(petProfile, savedUser.getId(), request.getPet());
 
         }
         return UserResponse.CreateUserDto.fromEntity(savedUser);
     }
 
-
+    @Transactional(readOnly = true)
     @Override
     public UserResponse.AuthDto getUserDetailsByUserId(String email) {
         User user = userRepository.findByEmail(email)
@@ -104,7 +107,7 @@ public class UserServiceImpl implements UserService {
 
         return UserResponse.AuthDto.fromEntity(user);
     }
-
+    @Transactional
     @Override
     public UserResponse.LoginDto login(UserRequest.LoginDto authRequest) {
         // 1. AuthenticationManager를 사용하여 사용자 인증 시도
@@ -126,6 +129,7 @@ public class UserServiceImpl implements UserService {
 
 
     }
+    @Transactional
     //jwt 토큰 생성 메서드
     private String generateJwtToken(UserResponse.AuthDto userDetails) {
         // 환경 변수에서 Secret Key와 만료 시간 가져오기
@@ -145,7 +149,7 @@ public class UserServiceImpl implements UserService {
                 .signWith(secretKey)
                 .compact();
     }
-
+    @Transactional(readOnly = true)
     @Override
     // 유저 정보, 반려견 정보 반환
     public UserResponse.GetUserDto getUser(Long userId) {
@@ -158,7 +162,7 @@ public class UserServiceImpl implements UserService {
 
         return UserResponse.GetUserDto.fromEntity(user,petList);
     }
-
+    @Transactional
     @Override
     public UserResponse.UpdateUserDto updateUser(Long userId, UserRequest.UpdateUserDto request) {
         User user = userRepository.findById(userId)
@@ -174,34 +178,42 @@ public class UserServiceImpl implements UserService {
         return UserResponse.UpdateUserDto.fromEntity(user);
 
     }
-
+    @Transactional
     @Override
     public void deleteUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         userRepository.delete(user);
     }
-
+    @Transactional
     @Override
-    public UserResponse.UpdateProfileDto updateProfile(Long userId, UserRequest.@Valid UpdateProfileDto request) {
+    public UserResponse.UpdateProfileDto updateProfile(Long userId,MultipartFile userProfile, UserRequest.UpdateProfileDto request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        String profileImage = user.getProfileImage();
+        if (userProfile != null && !userProfile.isEmpty()) {
+            List<MultipartFile> userProfiles = List.of(userProfile);
+            List<String> urls = imageService.upload(userProfiles);
+            profileImage = urls.get(0);
+        }
+
         user.updateProfile(
                 request.getUsername(),
-                request.getProfileImage(),
-                request.getStatusMessage()
+                profileImage,
+                request.getSocial()
         );
         userRepository.save(user);
         return UserResponse.UpdateProfileDto.fromEntity(user);
     }
-
+    @Transactional
     @Override
     public UserResponse.CoinDto getCoin(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         return UserResponse.CoinDto.fromEntity(user);
     }
-
+    @Transactional
     @Override
     public UserResponse.CoinDto earnCoin(Long userId, UserRequest.@Valid CoinDto request) {
         User user = userRepository.findById(userId)
@@ -211,7 +223,7 @@ public class UserServiceImpl implements UserService {
         return UserResponse.CoinDto.fromEntity(user);
 
     }
-
+    @Transactional
     @Override
     public UserResponse.CoinDto redeemCoin(Long userId, UserRequest.@Valid CoinDto request) {
         User user = userRepository.findById(userId)
@@ -221,6 +233,13 @@ public class UserServiceImpl implements UserService {
         return UserResponse.CoinDto.fromEntity(user);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public UserResponse.GetSearchedUserDtoList searchUsersWithSocial(String keyword) {
+        List<User> users = userRepository.findBySocialContaining(keyword);
+        return UserResponse.GetSearchedUserDtoList.fromEntity(users);
+
+    }
 
 
 }

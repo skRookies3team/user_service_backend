@@ -21,14 +21,14 @@ public class PetController {
 
     @Operation(summary = "펫 등록", description = "새로운 펫을 등록합니다.")
     @PostMapping(value = "/create" ,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<PetResponse.CreatePetDto> createPet(@RequestPart(value = "multipartFile") MultipartFile multipartFile, @RequestHeader("X-USER-ID") Long userId, @Valid @RequestPart PetRequest.CreatePetDto request) {
+    public ResponseEntity<PetResponse.CreatePetDto> createPet(@RequestPart(value = "multipartFile",required = false) MultipartFile multipartFile, @RequestHeader("X-USER-ID") Long userId, @Valid @RequestPart("request") PetRequest.CreatePetDto request) {
         return ResponseEntity.ok(petService.createPet(multipartFile, userId, request));
     }
 
     @Operation(summary = "펫 정보 수정", description = "기존 펫의 정보를 수정합니다.")
-    @PatchMapping("/{petId}")
-    public ResponseEntity<PetResponse.UpdatePetDto> updatePet(@PathVariable Long petId, @Valid @RequestBody PetRequest.UpdatePetDto request) {
-        return ResponseEntity.ok(petService.updatePet(petId, request));
+    @PatchMapping(value = "/{petId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<PetResponse.UpdatePetDto> updatePet(@RequestHeader("X-USER-ID") Long userId, @PathVariable Long petId,@RequestPart(value = "multipartFile",required = false) MultipartFile multipartFile, @Valid @RequestPart PetRequest.UpdatePetDto request) {
+        return ResponseEntity.ok(petService.updatePet(userId, multipartFile, petId, request));
     }
 
     @Operation(summary = "펫 정보 조회", description = "특정 ID의 펫 정보를 조회합니다.")

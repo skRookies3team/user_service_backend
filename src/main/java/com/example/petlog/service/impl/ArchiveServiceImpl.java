@@ -13,6 +13,7 @@ import com.example.petlog.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -27,12 +28,15 @@ public class ArchiveServiceImpl implements ArchiveService {
     private final UserRepository userRepository;
     private final ImageService imageService;
 
+    @Transactional
     @Override
     public ArchiveResponse.CreateArchiveDtoList createArchive(ArchiveRequest.CreateArchiveDto request, Long userId) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
-
+        if (request.getImages()== null) {
+            throw new BusinessException(ErrorCode.IMAGE_NOT_FOUND);
+        }
         //1. S3에 사진을 저장하고 url을 받음
         List<String> imageUrls = imageService.upload(request.getImages());
 
@@ -50,7 +54,7 @@ public class ArchiveServiceImpl implements ArchiveService {
         return ArchiveResponse.CreateArchiveDtoList.toList(archives);
 
     }
-
+    @Transactional(readOnly = true)
     @Override
     public ArchiveResponse.CreateArchiveDtoList getAllArchives(Long userId) {
         User user = userRepository.findById(userId)
@@ -58,14 +62,14 @@ public class ArchiveServiceImpl implements ArchiveService {
         List<Archive> archives = archiveRepository.findAllByUserId(user.getId());
         return ArchiveResponse.CreateArchiveDtoList.toList(archives);
     }
-
+    @Transactional(readOnly = true)
     @Override
     public ArchiveResponse.CreateArchiveDto getArchive(Long archiveId) {
         Archive archive = archiveRepository.findById(archiveId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ARCHIVE_NOT_FOUND));
         return ArchiveResponse.CreateArchiveDto.fromEntity(archive);
     }
-
+    @Transactional
     @Override
     public void delete(Long userId, ArchiveRequest.DeleteArchiveDto request) {
         User user = userRepository.findById(userId)

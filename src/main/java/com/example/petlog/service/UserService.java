@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface UserService {
 
-    UserResponse.CreateUserDto createUser(List<MultipartFile> multipartFiles, UserRequest.CreateUserAndPetDto request);
+    UserResponse.CreateUserDto createUser(MultipartFile userProfile, MultipartFile petProfile, UserRequest.CreateUserAndPetDto request);
     UserResponse.LoginDto login(UserRequest.LoginDto authRequest);
     UserResponse.AuthDto getUserDetailsByUserId(String userId);
 
@@ -20,11 +20,13 @@ public interface UserService {
 
     void deleteUser(Long userId);
 
-    UserResponse.UpdateProfileDto updateProfile(Long userId, UserRequest.@Valid UpdateProfileDto request);
+    UserResponse.UpdateProfileDto updateProfile(Long userId, MultipartFile userProfile, UserRequest.UpdateProfileDto request);
 
     UserResponse.CoinDto getCoin(Long userId);
 
     UserResponse.CoinDto earnCoin(Long userId, UserRequest.@Valid CoinDto request);
 
     UserResponse.CoinDto redeemCoin(Long userId, UserRequest.@Valid CoinDto request);
+
+    UserResponse.GetSearchedUserDtoList searchUsersWithSocial(String keyword);
 }
