@@ -4,16 +4,12 @@ import com.example.petlog.dto.request.UserRequest;
 import com.example.petlog.dto.response.UserResponse;
 import com.example.petlog.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -77,13 +73,13 @@ public class UserController {
 
     @Operation(summary = "코인 적립", description = "특정 ID의 사용자 코인을 적립합니다.")
     @PostMapping("/{id}/coin/earn")
-    public ResponseEntity<UserResponse.CoinDto> earnCoin(@PathVariable("id") Long userId, @Valid @RequestBody UserRequest.CoinDto request) {
+    public ResponseEntity<UserResponse.CoinLogDto> earnCoin(@PathVariable("id") Long userId, @Valid @RequestBody UserRequest.CoinDto request) {
         return ResponseEntity.ok(userService.earnCoin(userId, request));
     }
 
     @Operation(summary = "코인 사용", description = "특정 ID의 사용자 코인을 사용합니다.")
     @PostMapping("/{id}/coin/redeem")
-    public ResponseEntity<UserResponse.CoinDto> redeemCoin(@PathVariable("id") Long userId, @Valid @RequestBody UserRequest.CoinDto request) {
+    public ResponseEntity<UserResponse.CoinLogDto> redeemCoin(@PathVariable("id") Long userId, @Valid @RequestBody UserRequest.CoinDto request) {
         return ResponseEntity.ok(userService.redeemCoin(userId, request));
     }
 
