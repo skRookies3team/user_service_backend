@@ -1,43 +1,11 @@
-spring:
-  application:
-    name: petlog
-  datasource:
-    url: "${DB_URL}"
-    username: "${DB_USERNAME}"
-    password: "${DB_PASSWORD}"
-    driverClassName: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-
-  servlet:
-    multipart:
-      max-file-size: 10MB      # 파일 하나당 최대 크기 (기본 1MB -> 10MB로 증량)
-      max-request-size: 10MB
-
 server:
   port: 8080
 
-token:
-  secret: "${TOKEN_SECRET}"
-  expiration-time: "${TOKEN_EXPIRATION_TIME}"
+spring:
+  application:
+    name: user-service
 
-cloud:
-  aws:
-    s3:
-      access-key: "${AWS_ACCESS_KEY}"
-      secret-key: "${AWS_SECRET_KEY}"
-      bucket-name: "${AWS_S3_BUCKET}"
-    region: "${AWS_BUCKET_REGION}"
-
-springdoc:
-  api-docs:
-    path: "${SWAGGER_DOCS}"
-  swagger-ui:
-    path: "${SWAGGER_UI}"
-
-logging:
-  level:
-    org.springframework.transaction.interceptor: TRACE
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
