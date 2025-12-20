@@ -60,7 +60,7 @@ public class SecurityConfig {
                         ).permitAll()
 
                         //그 외 모든 API 요청은 JWT 인증 필수
-                        .anyRequest().authenticated());
+                        .anyRequest().permitAll());
                         //Http Basic 인증을 security 필터 체인에 추가한다.
                         //Customer.withDefaults()는 Spring security의 기본 basic 인증을 사용하겠다는 의미이다.
                         //클라이언트가 api 요청을 보낼때 authorization 헤더에
