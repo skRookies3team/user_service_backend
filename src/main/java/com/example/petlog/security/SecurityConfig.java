@@ -44,9 +44,7 @@ public class SecurityConfig {
                         // Kubernetes 헬스체크 허용
                         .requestMatchers(
                                 "/actuator/health",
-                                "/actuator/health/**",
-                                "/api/actuator/health",
-                                "/api/actuator/health/**"
+                                "/actuator/health/**"
                         ).permitAll()
 
                         // 회원가입, 로그인 허용
