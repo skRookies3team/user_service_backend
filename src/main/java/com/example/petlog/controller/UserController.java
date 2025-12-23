@@ -88,4 +88,10 @@ public class UserController {
     public ResponseEntity<UserResponse.GetSearchedUserDtoList> searchUsersWithSocial(@RequestParam("keyword") String keyword) {
         return ResponseEntity.ok(userService.searchUsersWithSocial(keyword));
     }
+
+    @Operation(summary = "동물 사진 분석", description = "동물 사진을 받아서 종과 품종을 분석합니다.")
+    @PostMapping(value="/ai",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UserResponse.AnalyzeAnimalDto> analyzeAnimal(@RequestPart(value = "photo") MultipartFile photo) {
+        return ResponseEntity.ok(userService.analyzeAnimal(photo));
+    }
 }

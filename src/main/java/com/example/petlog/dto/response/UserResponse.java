@@ -1,9 +1,6 @@
 package com.example.petlog.dto.response;
 
-import com.example.petlog.entity.CoinType;
-import com.example.petlog.entity.GenderType;
-import com.example.petlog.entity.UserType;
-import com.example.petlog.entity.User;
+import com.example.petlog.entity.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -284,6 +281,24 @@ public class UserResponse {
                     .isEmpty(isEmpty)
                     .build();
         }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class AnalyzeAnimalDto {
+        //종
+        private Species species;
+        //보유량
+        private String breed;
+        public static AnalyzeAnimalDto fromEntity(Species species, String breed) {
+            return AnalyzeAnimalDto.builder()
+                    .species(species)
+                    .breed(breed)
+                    .build();
+        }
+
     }
 
 
