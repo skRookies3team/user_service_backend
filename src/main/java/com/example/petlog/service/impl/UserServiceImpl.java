@@ -1,6 +1,7 @@
 package com.example.petlog.service.impl;
 
 import com.example.petlog.dto.request.UserRequest;
+import com.example.petlog.dto.response.CoinLogResponse;
 import com.example.petlog.dto.response.PetResponse;
 import com.example.petlog.dto.response.UserResponse;
 import com.example.petlog.entity.Pet;
@@ -11,6 +12,7 @@ import com.example.petlog.exception.ErrorCode;
 import com.example.petlog.repository.PetRepository;
 import com.example.petlog.repository.UserRepository;
 import com.example.petlog.security.jwt.UserInfoDetails;
+import com.example.petlog.service.CoinLogService;
 import com.example.petlog.service.ImageService;
 import com.example.petlog.service.PetService;
 import com.example.petlog.service.UserService;
@@ -31,13 +33,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.List;
 import java.util.Objects;
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +43,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PetRepository petRepository;
+    private final CoinLogService coinLogService;
     private final PetService petService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -215,22 +214,24 @@ public class UserServiceImpl implements UserService {
     }
     @Transactional
     @Override
-    public UserResponse.CoinDto earnCoin(Long userId, UserRequest.@Valid CoinDto request) {
+    public UserResponse.CoinLogDto earnCoin(Long userId, UserRequest.CoinDto request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         user.earnCoin(request.getAmount());
         userRepository.save(user);
-        return UserResponse.CoinDto.fromEntity(user);
+        CoinLogResponse.CreateCoinLogDto coinResponse = coinLogService.useCoin(user, request.getAmount(), request.getType());
+        return UserResponse.CoinLogDto.fromEntity(user, coinResponse.getAmount(), coinResponse.getType(), coinResponse.getCreatedAt());
 
     }
     @Transactional
     @Override
-    public UserResponse.CoinDto redeemCoin(Long userId, UserRequest.@Valid CoinDto request) {
+    public UserResponse.CoinLogDto redeemCoin(Long userId, UserRequest.@Valid CoinDto request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         user.redeemCoin(user.getPetCoin(), request.getAmount());
         userRepository.save(user);
-        return UserResponse.CoinDto.fromEntity(user);
+        CoinLogResponse.CreateCoinLogDto coinResponse = coinLogService.useCoin(user, -request.getAmount(), request.getType());
+        return UserResponse.CoinLogDto.fromEntity(user,coinResponse.getAmount(), coinResponse.getType(), coinResponse.getCreatedAt());
     }
 
     @Transactional(readOnly = true)
