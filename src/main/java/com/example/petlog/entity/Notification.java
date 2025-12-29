@@ -24,12 +24,14 @@ public class Notification {
     @Column(name = "id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    private AlarmType type;
+
+    @Column(nullable = false)
+    private String title;
+
     @Column(nullable = false)
     private String content;
-
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL)
     private List<UserNotification> userNotifications = new ArrayList<>();

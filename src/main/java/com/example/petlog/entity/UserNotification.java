@@ -34,4 +34,8 @@ public class UserNotification {
     @Column(nullable = false)
     private boolean isRead;
 
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
 }
