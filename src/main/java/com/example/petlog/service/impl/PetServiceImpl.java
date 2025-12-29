@@ -19,7 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PetServiceImpl implements PetService {
@@ -33,6 +35,12 @@ public class PetServiceImpl implements PetService {
     @Override
     // 펫 생성
     public PetResponse.CreatePetDto createPet(MultipartFile petProfile, Long userId, PetRequest.CreatePetDto request) {
+
+        log.error("=== CREATE PET START ===");
+        log.error("userId = {}", userId);
+        log.error("petProfile = {}",
+                petProfile == null ? "null" : petProfile.getOriginalFilename());
+        log.error("birth = {}", request.getBirth());
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
