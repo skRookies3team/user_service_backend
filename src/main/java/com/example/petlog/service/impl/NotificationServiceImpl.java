@@ -56,4 +56,14 @@ public class NotificationServiceImpl implements NotificationService {
 
 
     }
+
+    @Override
+    public NotificationResponse.GetNotificationListDto getAllNotifications(Long userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        List<UserNotification> userNotifications = userNotificationRepository.findAllByReceiver(user);
+        return NotificationResponse.GetNotificationListDto.fromEntity(userNotifications);
+    }
 }

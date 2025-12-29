@@ -4,6 +4,7 @@ package com.example.petlog.dto.response;
 import com.example.petlog.entity.AlarmType;
 import com.example.petlog.entity.Archive;
 import com.example.petlog.entity.Notification;
+import com.example.petlog.entity.UserNotification;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -59,6 +60,8 @@ public class NotificationResponse {
     public static class GetNotificationDto {
         private Long notificationId;
         private Long userNotificationId;
+        private Long senderId;
+        private Long receiverId;
         private String content;
         private String title;
         private LocalDateTime time;
@@ -73,5 +76,8 @@ public class NotificationResponse {
         boolean isEmpty;
         private List<GetNotificationDto> notifications;
 
+        public static GetNotificationListDto fromEntity(List<UserNotification> userNotifications) {
+
+        }
     }
 }
