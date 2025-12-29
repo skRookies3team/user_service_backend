@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: "${DB_URL}"
+    username: "${DB_USERNAME}"
+    password: "${DB_PASSWORD}"
     driverClassName: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
@@ -22,16 +22,16 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 token:
-  secret: ${TOKEN_SECRET}
-  expiration-time: ${TOKEN_EXPIRATION_TIME}
+  secret: "${TOKEN_SECRET}"
+  expiration-time: "${TOKEN_EXPIRATION_TIME}"
 
 cloud:
   aws:
     s3:
-      access-key: ${AWS_ACCESS_KEY}
-      secret-key: ${AWS_SECRET_KEY}
-      bucket-name: ${AWS_S3_BUCKET}
-    region: ${AWS_BUCKET_REGION}
+      access-key: "${AWS_ACCESS_KEY}"
+      secret-key: "${AWS_SECRET_KEY}"
+      bucket-name: "${AWS_S3_BUCKET}"
+    region: "${AWS_BUCKET_REGION}"
 
 springdoc:
   api-docs:
