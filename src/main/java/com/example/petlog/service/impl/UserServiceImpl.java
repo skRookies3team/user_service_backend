@@ -21,6 +21,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -38,6 +39,7 @@ import java.util.Objects;
 import java.util.Date;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -56,6 +58,7 @@ public class UserServiceImpl implements UserService {
     @Override
     // 유저 생성
     public UserResponse.CreateUserDto createUser(MultipartFile userProfile, MultipartFile petProfile, UserRequest.CreateUserAndPetDto request) {
+        log.error("회원가입 시작");
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(request.getUser().getPassword());
         //아이디 중복
@@ -90,6 +93,7 @@ public class UserServiceImpl implements UserService {
                 .username(request.getUser().getUsername())
                 .build();
         User savedUser = userRepository.save(user);
+        log.error("userId = {}", savedUser.getId());
 
         if (request.getPet() != null) {
             petService.createPet(petProfile, savedUser.getId(), request.getPet());
