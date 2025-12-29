@@ -39,14 +39,21 @@ public class NotificationServiceImpl implements NotificationService {
         List<User> users = userRepository.findAllById(request.getUsers());
         LocalDateTime time = LocalDateTime.now();
         List<UserNotification> userNotifications = users.stream()
-                .map( receiver -> UserNotification.builder()
-                        .isRead(false)
-                        .notification(notification)
-                        .user(receiver)
-                        .createdAt(time)
-                        .build()).toList();
-
+                .map( receiver -> {
+                    UserNotification un = UserNotification.builder()
+                                    .isRead(false)
+                                    .notification(notification)
+                                    .sender(user)
+                                    .receiver(receiver)
+                                    .createdAt(time)
+                                    .build();
+                    notification.getUserNotifications().add(un);
+                    return un;
+                }).toList();
         notificationRepository.save(notification);
-        return NotificationResponse.CreateNotificationDto.fromEntity(notification, time, false, request.getUsers());
+        return NotificationResponse.CreateNotificationDto.fromEntity(notification, time, false, request.getUsers(), request.getSenderId());
+
+
+
     }
 }

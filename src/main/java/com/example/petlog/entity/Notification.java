@@ -33,6 +33,7 @@ public class Notification {
     @Column(nullable = false)
     private String content;
 
+    @Builder.Default
     @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL)
     private List<UserNotification> userNotifications = new ArrayList<>();
 
