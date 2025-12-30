@@ -1,15 +1,7 @@
 package com.example.petlog.dto.response;
 
-import com.example.petlog.entity.GenderType;
-import com.example.petlog.entity.UserType;
-import com.example.petlog.entity.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotNull;
+import com.example.petlog.entity.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -195,11 +187,41 @@ public class UserResponse {
     @AllArgsConstructor
     @Builder
     public static class CoinDto {
+        //사용자 id
+        private Long userId;
+        //보유량
         private Long petCoin;
-
         public static CoinDto fromEntity(User user) {
             return CoinDto.builder()
+                    .userId(user.getId())
                     .petCoin(user.getPetCoin())
+                    .build();
+        }
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class CoinLogDto {
+        //사용자 id
+        private Long userId;
+        //보유량
+        private Long petCoin;
+        //변화량
+        private Long amount;
+        //타입
+        private CoinType type;
+        //적립일
+        private LocalDateTime time;
+        public static CoinLogDto fromEntity(User user, Long amount, CoinType type, LocalDateTime time) {
+            return CoinLogDto.builder()
+                    .amount(amount)
+                    .type(type)
+                    .userId(user.getId())
+                    .petCoin(user.getPetCoin())
+                    .time(time)
                     .build();
         }
 
@@ -259,6 +281,24 @@ public class UserResponse {
                     .isEmpty(isEmpty)
                     .build();
         }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class AnalyzeAnimalDto {
+        //종
+        private Species species;
+        //보유량
+        private String breed;
+        public static AnalyzeAnimalDto fromEntity(Species species, String breed) {
+            return AnalyzeAnimalDto.builder()
+                    .species(species)
+                    .breed(breed)
+                    .build();
+        }
+
     }
 
 

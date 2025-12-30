@@ -1,5 +1,6 @@
 package com.example.petlog.dto.request;
 
+import com.example.petlog.entity.CoinType;
 import com.example.petlog.entity.GenderType;
 import com.example.petlog.entity.Pet;
 import jakarta.validation.constraints.NotBlank;
@@ -92,6 +93,8 @@ public class UserRequest{
     @Setter
     @NoArgsConstructor
     public static class CoinDto {
+        @NotNull
+        private CoinType type;
         @NotNull
         private Long amount;
     }

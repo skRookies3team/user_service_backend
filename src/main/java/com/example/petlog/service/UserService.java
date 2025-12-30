@@ -3,10 +3,7 @@ package com.example.petlog.service;
 import com.example.petlog.dto.request.UserRequest;
 import com.example.petlog.dto.response.UserResponse;
 import jakarta.validation.Valid;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 public interface UserService {
 
@@ -24,9 +21,11 @@ public interface UserService {
 
     UserResponse.CoinDto getCoin(Long userId);
 
-    UserResponse.CoinDto earnCoin(Long userId, UserRequest.@Valid CoinDto request);
+    UserResponse.CoinLogDto earnCoin(Long userId, UserRequest.@Valid CoinDto request);
 
-    UserResponse.CoinDto redeemCoin(Long userId, UserRequest.@Valid CoinDto request);
+    UserResponse.CoinLogDto redeemCoin(Long userId, UserRequest.@Valid CoinDto request);
 
     UserResponse.GetSearchedUserDtoList searchUsersWithSocial(String keyword);
+
+    UserResponse.AnalyzeAnimalDto analyzeAnimal(MultipartFile photo);
 }
