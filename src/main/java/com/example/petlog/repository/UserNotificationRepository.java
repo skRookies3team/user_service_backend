@@ -10,4 +10,5 @@ import java.util.List;
 public interface UserNotificationRepository extends JpaRepository<UserNotification, Long> {
 
     List<UserNotification> findAllByReceiver(User user);
+    List<UserNotification> findAllByReceiverOrderByCreatedAtDesc(User user);
 }

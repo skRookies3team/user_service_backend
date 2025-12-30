@@ -22,7 +22,7 @@ public class UserNotification {
     @Column(name = "id")
     private Long id;
 
-    //수신자
+    //송신자
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id", nullable = false)
     private User sender;
@@ -39,8 +39,14 @@ public class UserNotification {
     @Column(nullable = false)
     private boolean isRead;
 
+    @Column(nullable = false)
+    private Long targetId;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
+    public void readNotification() {
+        this.isRead = true;
+    }
 }

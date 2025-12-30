@@ -33,13 +33,13 @@ public class NotificationController {
         return ResponseEntity.ok(notificationService.getAllNotifications(userId));
     }
 
-    /*@Operation(summary = "펫 정보 수정", description = "기존 펫의 정보를 수정합니다.")
-    @PatchMapping(value = "/{petId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<PetResponse.UpdatePetDto> updatePet(@RequestHeader("X-USER-ID") Long userId, @PathVariable Long petId,@RequestPart(value = "multipartFile",required = false) MultipartFile multipartFile, @Valid @RequestPart PetRequest.UpdatePetDto request) {
-        return ResponseEntity.ok(petService.updatePet(userId, multipartFile, petId, request));
+    @Operation(summary = "알람 읽음 처리", description = "알람을 읽음 처리합니다.")
+    @PatchMapping("/{user-notificationId}")
+    public ResponseEntity<NotificationResponse.GetNotificationDto> readNotification(@PathVariable("user-notificationId") Long notificationId) {
+        return ResponseEntity.ok(notificationService.readNotification(notificationId));
     }
 
-
+    /*
     @Operation(summary = "펫 삭제", description = "특정 ID의 펫을 삭제합니다.")
     @DeleteMapping("/{petId}")
     public ResponseEntity<String> deletePet(@PathVariable Long petId) {

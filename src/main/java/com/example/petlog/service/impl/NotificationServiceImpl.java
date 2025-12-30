@@ -36,22 +36,20 @@ public class NotificationServiceImpl implements NotificationService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         Notification notification =  NotificationRequest.CreateNotificationDto.toEntity(user, request);
-        List<User> users = userRepository.findAllById(request.getUsers());
+        User receiver = userRepository.findById(request.getReceiverId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         LocalDateTime time = LocalDateTime.now();
-        List<UserNotification> userNotifications = users.stream()
-                .map( receiver -> {
-                    UserNotification un = UserNotification.builder()
-                                    .isRead(false)
-                                    .notification(notification)
-                                    .sender(user)
-                                    .receiver(receiver)
-                                    .createdAt(time)
-                                    .build();
-                    notification.getUserNotifications().add(un);
-                    return un;
-                }).toList();
+        UserNotification un = UserNotification.builder()
+                .isRead(false)
+                .notification(notification)
+                .sender(user)
+                .receiver(receiver)
+                .targetId(request.getTargetId())
+                .createdAt(time)
+                .build();
+        notification.getUserNotifications().add(un);
         notificationRepository.save(notification);
-        return NotificationResponse.CreateNotificationDto.fromEntity(notification, time, false, request.getUsers(), request.getSenderId());
+        return NotificationResponse.CreateNotificationDto.fromEntity(notification, time, false, request.getReceiverId(), request.getSenderId());
 
 
 
@@ -62,8 +60,20 @@ public class NotificationServiceImpl implements NotificationService {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        List<UserNotification> userNotifications = userNotificationRepository.findAllByReceiverOrderByCreatedAtDesc(user);
 
-        List<UserNotification> userNotifications = userNotificationRepository.findAllByReceiver(user);
         return NotificationResponse.GetNotificationListDto.fromEntity(userNotifications);
+    }
+
+    @Override
+    public NotificationResponse.GetNotificationDto readNotification(Long notificationId) {
+        UserNotification userNotification = userNotificationRepository.findById(notificationId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOTIFICATION_NOT_FOUND));
+        userNotification.readNotification();
+        userNotificationRepository.save(userNotification);
+        return NotificationResponse.GetNotificationDto.fromEntity(userNotification);
+
+
+
     }
 }

@@ -9,4 +9,6 @@ public interface NotificationService {
     NotificationResponse.CreateNotificationDto createNotification(NotificationRequest.CreateNotificationDto request);
 
     NotificationResponse.GetNotificationListDto getAllNotifications(Long userId);
+
+    NotificationResponse.GetNotificationDto readNotification(Long notificationId);
 }

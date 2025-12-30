@@ -32,13 +32,15 @@ public class NotificationResponse {
         //발신자
         private Long senderId;
         //수신자
-        private List<Long> receivers;
+        private Long receiverId;
+        //타겟 id
+        private Long targetId;
         //시간
         private LocalDateTime time;
         //읽음 여부
         private boolean isRead;
 
-        public static CreateNotificationDto fromEntity(Notification notification, LocalDateTime time, boolean isRead, List<Long> users, Long senderId) {
+        public static CreateNotificationDto fromEntity(Notification notification, LocalDateTime time, boolean isRead, Long receiverId, Long senderId) {
 
             return CreateNotificationDto.builder()
                     .alarmId(notification.getId())
@@ -48,7 +50,7 @@ public class NotificationResponse {
                     .time(time)
                     .senderId(senderId)
                     .isRead(isRead)
-                    .receivers(users)
+                    .receiverId(receiverId)
                     .build();
         }
     }
@@ -65,6 +67,7 @@ public class NotificationResponse {
         private String content;
         private String title;
         private LocalDateTime time;
+        private Long targetId;
         private boolean isRead;
 
         public static GetNotificationDto fromEntity(UserNotification userNotification) {
@@ -77,6 +80,7 @@ public class NotificationResponse {
                     .userNotificationId(userNotification.getId())
                     .senderId(userNotification.getSender().getId())
                     .receiverId(userNotification.getReceiver().getId())
+                    .targetId(userNotification.getTargetId())
                     .build();
         }
 

@@ -22,11 +22,17 @@ public class NotificationRequest {
         @NotNull
         private AlarmType type;
 
-        //팔로워/댓글단 사람/좋아요한/매칭보낸 사람 id
+        @NotNull
+        //팔로워/댓글단/좋아요한/매칭보낸 사람 id
         private Long senderId;
 
         @NotNull
-        private List<Long> users;
+        private Long receiverId;
+
+        @NotNull
+        //알람 클릭시 이동할 id(게시물 id, 사용자 id)
+        private Long targetId;
+
 
 
 
