@@ -66,6 +66,20 @@ public class NotificationResponse {
         private String title;
         private LocalDateTime time;
         private boolean isRead;
+
+        public static GetNotificationDto fromEntity(UserNotification userNotification) {
+            return GetNotificationDto.builder()
+                    .content(userNotification.getNotification().getContent())
+                    .time(userNotification.getCreatedAt())
+                    .title(userNotification.getNotification().getTitle())
+                    .isRead(userNotification.isRead())
+                    .notificationId(userNotification.getNotification().getId())
+                    .userNotificationId(userNotification.getId())
+                    .senderId(userNotification.getSender().getId())
+                    .receiverId(userNotification.getReceiver().getId())
+                    .build();
+        }
+
     }
 
     @AllArgsConstructor
@@ -77,6 +91,14 @@ public class NotificationResponse {
         private List<GetNotificationDto> notifications;
 
         public static GetNotificationListDto fromEntity(List<UserNotification> userNotifications) {
+            boolean isEmpty = userNotifications.isEmpty();
+            List<GetNotificationDto> notifications = userNotifications.stream()
+                    .map(userNotification ->GetNotificationDto.fromEntity(userNotification))
+                    .toList();
+            return GetNotificationListDto.builder()
+                    .notifications(notifications)
+                    .isEmpty(isEmpty)
+                    .build();
 
         }
     }
