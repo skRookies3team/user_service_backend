@@ -1,5 +1,5 @@
 package com.example.petlog.entity;
 
 public enum Species {
-    CAT, DOG, RABBIT, HAMSTER, FOX, BIRD
+    CAT, DOG, RABBIT, HAMSTER, FOX, BIRD, FISH, GUINEAPIG, REPTILE, ETC
 }

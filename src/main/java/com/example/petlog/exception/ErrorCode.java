@@ -42,6 +42,10 @@ public enum ErrorCode {
     //아카이브 관련
     ARCHIVE_NOT_FOUND("ARCHIVE_001","보관함을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     IMAGE_NOT_FOUND("IMAGE_001","이미지를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+
+    //알람 관련
+    INVALID_ALARM_TYPE("ALARM_001","알람 타입이 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
+    NOTIFICATION_NOT_FOUND("NOTIFICATION_001","알람을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     // 서버 오류 (50X)
     INTERNAL_SERVER_ERROR("SERVER_001", "서버 내부 오류가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR),
     DATABASE_ERROR("SERVER_002", "데이터베이스 오류가 발생했습니다", HttpStatus.INTERNAL_SERVER_ERROR);

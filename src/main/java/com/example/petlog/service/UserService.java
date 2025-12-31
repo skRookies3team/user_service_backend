@@ -26,4 +26,6 @@ public interface UserService {
     UserResponse.CoinLogDto redeemCoin(Long userId, UserRequest.@Valid CoinDto request);
 
     UserResponse.GetSearchedUserDtoList searchUsersWithSocial(String keyword);
+
+    UserResponse.AnalyzeAnimalDto analyzeAnimal(MultipartFile photo);
 }

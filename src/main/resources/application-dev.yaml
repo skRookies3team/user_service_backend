@@ -1,4 +1,8 @@
 spring:
+  ai:
+    openai:
+      api-key: "${API_KEY}"
+
   datasource:
     url: "${DB_URL}"
     username: "${DB_USERNAME}"
@@ -7,7 +11,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 

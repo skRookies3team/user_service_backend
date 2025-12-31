@@ -12,10 +12,7 @@ import com.example.petlog.exception.ErrorCode;
 import com.example.petlog.repository.PetRepository;
 import com.example.petlog.repository.UserRepository;
 import com.example.petlog.security.jwt.UserInfoDetails;
-import com.example.petlog.service.CoinLogService;
-import com.example.petlog.service.ImageService;
-import com.example.petlog.service.PetService;
-import com.example.petlog.service.UserService;
+import com.example.petlog.service.*;
 import com.example.petlog.util.Utils;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -50,6 +47,7 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final ImageService imageService;
+    private final AiService aiService;
     private final Utils utils;
     private final Environment env;
     private final String userBaseUrl = "https://petlog-images-bucket.s3.ap-northeast-2.amazonaws.com/af4bbf57-a_%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202025-12-16%20161002.png";
@@ -244,6 +242,11 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findBySocialContaining(keyword);
         return UserResponse.GetSearchedUserDtoList.fromEntity(users);
 
+    }
+
+    @Override
+    public UserResponse.AnalyzeAnimalDto analyzeAnimal(MultipartFile photo) {
+        return aiService.analyzeAnimal(photo);
     }
 
 
