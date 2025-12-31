@@ -1,7 +1,4 @@
 spring:
-  ai:
-    openai:
-      api-key: "${API_KEY}"
 
   datasource:
     url: "${DB_URL}"

@@ -2,10 +2,13 @@ server:
   port: 8080
 
 spring:
+  ai:
+    openai:
+      api-key: "${API_KEY}"
   application:
     name: user-service
   profiles:
-    active: prod
+    active: dev
   servlet:
     multipart:
       max-file-size: 30MB
