@@ -69,6 +69,7 @@ public class NotificationResponse {
         private LocalDateTime time;
         private Long targetId;
         private boolean isRead;
+        private AlarmType alarmType;
 
         public static GetNotificationDto fromEntity(UserNotification userNotification) {
             return GetNotificationDto.builder()
@@ -81,6 +82,7 @@ public class NotificationResponse {
                     .senderId(userNotification.getSender().getId())
                     .receiverId(userNotification.getReceiver().getId())
                     .targetId(userNotification.getTargetId())
+                    .alarmType(userNotification.getNotification().getType())
                     .build();
         }
 
