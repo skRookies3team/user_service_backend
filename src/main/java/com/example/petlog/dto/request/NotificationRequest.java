@@ -4,9 +4,7 @@ import com.example.petlog.entity.*;
 import com.example.petlog.exception.BusinessException;
 import com.example.petlog.exception.ErrorCode;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +15,8 @@ public class NotificationRequest {
     @Getter
     @Setter
     @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     public static class CreateNotificationDto {
         //알람 타입
         @NotNull
@@ -29,11 +29,11 @@ public class NotificationRequest {
         @NotNull
         private Long receiverId;
 
+        //알람 클릭시 이동할 id(게시물 id, 사용자 id, 일기id, 리캡id)
         @NotNull
-        //알람 클릭시 이동할 id(게시물 id, 사용자 id)
         private Long targetId;
 
-
+        private Long coin;
 
 
         public static Notification toEntity(User user, NotificationRequest.CreateNotificationDto request) {
@@ -53,6 +53,15 @@ public class NotificationRequest {
             } else if (request.getType() == AlarmType.MATCH) {
                 content = name + "님이 회원님과의 매칭을 원합니다.";
                 title = "매칭";
+            } else if (request.getType() == AlarmType.COIN) {
+                content = "펫코인 "+request.coin.toString()+ "원이 적립되었습니다.";
+                title = "펫코인";
+            } else if (request.getType() == AlarmType.DIARY) {
+                content = "일기가 생성되었습니다.";
+                title = "일기";
+            } else if (request.getType() == AlarmType.RECAP) {
+                content ="리캡이 생성되었습니다.";
+                title = "리캡";
             } else {
                 throw new BusinessException(ErrorCode.INVALID_ALARM_TYPE);
             }
