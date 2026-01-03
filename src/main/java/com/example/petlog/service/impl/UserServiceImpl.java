@@ -1,9 +1,11 @@
 package com.example.petlog.service.impl;
 
+import com.example.petlog.dto.request.NotificationRequest;
 import com.example.petlog.dto.request.UserRequest;
 import com.example.petlog.dto.response.CoinLogResponse;
 import com.example.petlog.dto.response.PetResponse;
 import com.example.petlog.dto.response.UserResponse;
+import com.example.petlog.entity.AlarmType;
 import com.example.petlog.entity.Pet;
 import com.example.petlog.entity.User;
 import com.example.petlog.entity.UserType;
@@ -43,6 +45,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PetRepository petRepository;
     private final CoinLogService coinLogService;
+    private final NotificationService notificationService;
     private final PetService petService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -222,6 +225,14 @@ public class UserServiceImpl implements UserService {
         user.earnCoin(request.getAmount());
         userRepository.save(user);
         CoinLogResponse.CreateCoinLogDto coinResponse = coinLogService.useCoin(user, request.getAmount(), request.getType());
+        NotificationRequest.CreateNotificationDto coinDto =  NotificationRequest.CreateNotificationDto.builder()
+                        .coin(request.getAmount())
+                        .senderId(user.getId())
+                        .receiverId(user.getId())
+                        .targetId(user.getId())
+                        .type(AlarmType.COIN)
+                        .build();
+        notificationService.createNotification(coinDto);
         return UserResponse.CoinLogDto.fromEntity(user, coinResponse.getAmount(), coinResponse.getType(), coinResponse.getCreatedAt());
 
     }
