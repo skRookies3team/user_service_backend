@@ -5,6 +5,13 @@ spring:
   ai:
     openai:
       api-key: "${API_KEY}"
+      timeout: 60s
+    retry:
+      max-attempts: 3
+      backoff:
+        initial-interval: 2s
+        multiplier: 2
+
   application:
     name: user-service
   profiles:
