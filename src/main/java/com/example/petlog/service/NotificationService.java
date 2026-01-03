@@ -11,4 +11,6 @@ public interface NotificationService {
     NotificationResponse.GetNotificationListDto getAllNotifications(Long userId);
 
     NotificationResponse.GetNotificationDto readNotification(Long notificationId);
+
+    void readAllNotification(Long userId);
 }

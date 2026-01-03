@@ -39,18 +39,12 @@ public class NotificationController {
         return ResponseEntity.ok(notificationService.readNotification(notificationId));
     }
 
-    /*
-    @Operation(summary = "펫 삭제", description = "특정 ID의 펫을 삭제합니다.")
-    @DeleteMapping("/{petId}")
-    public ResponseEntity<String> deletePet(@PathVariable Long petId) {
-        petService.deletePet(petId);
-        return ResponseEntity.ok("펫이 삭제되었습니다.");
+    @Operation(summary = "모든 알람 읽음 처리", description = "모든 알람을 읽음 처리합니다.")
+    @PatchMapping("/read-all")
+    public ResponseEntity<String> readAllNotification(@RequestHeader("X-USER-ID") Long userId) {
+        notificationService.readAllNotification(userId);
+        return ResponseEntity.ok("모든 알람을 읽음 처리했습니다.");
     }
 
-    @Operation(summary = "펫 상태 변경 (사망)", description = "특정 ID의 펫 상태를 '사망'으로 변경합니다.")
-    @PatchMapping("/lost/{petId}")
-    public ResponseEntity<String> lostPet(@PathVariable Long petId) {
-        petService.lostPet(petId);
-        return ResponseEntity.ok("상태 변경을 완료하였습니다.");
-    }*/
+
 }

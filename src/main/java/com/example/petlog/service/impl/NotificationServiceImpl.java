@@ -76,4 +76,16 @@ public class NotificationServiceImpl implements NotificationService {
 
 
     }
+
+    @Override
+    public void readAllNotification(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        List<UserNotification> userNotifications = userNotificationRepository.findAllByReceiver(user);
+        userNotifications.stream()
+                .forEach(notification -> notification.readNotification());
+        userNotificationRepository.saveAll(userNotifications);
+
+
+    }
 }
