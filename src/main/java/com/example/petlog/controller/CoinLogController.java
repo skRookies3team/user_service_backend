@@ -15,9 +15,21 @@ public class CoinLogController {
 
     private final CoinLogService coinLogService;
 
-    @Operation(summary = "코인 사용 내역 조회", description = "사용자의 코인 사용 내역을 조회합니다.")
+    @Operation(summary = "코인 내역 조회", description = "사용자의 모든 코인 내역을 조회합니다.")
     @GetMapping
     public ResponseEntity<CoinLogResponse.CreateCoinLogDtoList> getCoinLog(@RequestHeader("X-USER-ID") Long userId) {
         return ResponseEntity.ok(coinLogService.getCoinLog(userId));
+    }
+
+    @Operation(summary = "코인 적립 내역 조회", description = "사용자의 코인 적립 내역을 조회합니다.")
+    @GetMapping("/add")
+    public ResponseEntity<CoinLogResponse.CreateCoinLogDtoList> getCoinAddLog(@RequestHeader("X-USER-ID") Long userId) {
+        return ResponseEntity.ok(coinLogService.getCoinAddLog(userId));
+    }
+
+    @Operation(summary = "코인 사용 내역 조회", description = "사용자의 코인 사용 내역을 조회합니다.")
+    @GetMapping("/redeem")
+    public ResponseEntity<CoinLogResponse.CreateCoinLogDtoList> getCoinUseLog(@RequestHeader("X-USER-ID") Long userId) {
+        return ResponseEntity.ok(coinLogService.getCoinUseLog(userId));
     }
 }
