@@ -5,10 +5,7 @@ import com.example.petlog.dto.request.UserRequest;
 import com.example.petlog.dto.response.CoinLogResponse;
 import com.example.petlog.dto.response.PetResponse;
 import com.example.petlog.dto.response.UserResponse;
-import com.example.petlog.entity.AlarmType;
-import com.example.petlog.entity.Pet;
-import com.example.petlog.entity.User;
-import com.example.petlog.entity.UserType;
+import com.example.petlog.entity.*;
 import com.example.petlog.exception.BusinessException;
 import com.example.petlog.exception.ErrorCode;
 import com.example.petlog.repository.PetRepository;
@@ -220,7 +217,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         user.earnCoin(request.getAmount());
         userRepository.save(user);
-        CoinLogResponse.CreateCoinLogDto coinResponse = coinLogService.useCoin(user, request.getAmount(), request.getType());
+        CoinLogResponse.CreateCoinLogDto coinResponse = coinLogService.useCoin(user, request.getAmount(), request.getType(), Coin.ADD);
         NotificationRequest.CreateNotificationDto coinDto =  NotificationRequest.CreateNotificationDto.builder()
                         .coin(request.getAmount())
                         .senderId(user.getId())
@@ -239,7 +236,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         user.redeemCoin(user.getPetCoin(), request.getAmount());
         userRepository.save(user);
-        CoinLogResponse.CreateCoinLogDto coinResponse = coinLogService.useCoin(user, -request.getAmount(), request.getType());
+        CoinLogResponse.CreateCoinLogDto coinResponse = coinLogService.useCoin(user, -request.getAmount(), request.getType(), Coin.REDEEM);
         return UserResponse.CoinLogDto.fromEntity(user,coinResponse.getAmount(), coinResponse.getType(), coinResponse.getCreatedAt());
     }
 

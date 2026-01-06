@@ -30,12 +30,16 @@ public class CoinLog {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    //적립 타입
+    //적립,사용 타입
     @Enumerated(EnumType.STRING)
     private CoinType type;
     //변화량
     @Column(nullable = false)
     private Long amount;
+
+    //코인 타입
+    @Enumerated(EnumType.STRING)
+    private Coin coin;
 
     //적립일
     @CreationTimestamp

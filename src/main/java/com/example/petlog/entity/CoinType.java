@@ -1,5 +1,5 @@
 package com.example.petlog.entity;
 
 public enum CoinType {
-    WRITEDIARY, WIRTEFEED
+    WRITEDIARY, WIRTEFEED, BUY, RECAP
 }
