@@ -54,7 +54,7 @@ public class NotificationServiceImpl implements NotificationService {
 
 
     }
-
+    @Transactional
     @Override
     public NotificationResponse.GetNotificationListDto getAllNotifications(Long userId) {
 
@@ -64,7 +64,7 @@ public class NotificationServiceImpl implements NotificationService {
 
         return NotificationResponse.GetNotificationListDto.fromEntity(userNotifications);
     }
-
+    @Transactional
     @Override
     public NotificationResponse.GetNotificationDto readNotification(Long notificationId) {
         UserNotification userNotification = userNotificationRepository.findById(notificationId)
@@ -76,7 +76,7 @@ public class NotificationServiceImpl implements NotificationService {
 
 
     }
-
+    @Transactional
     @Override
     public void readAllNotification(Long userId) {
         User user = userRepository.findById(userId)
