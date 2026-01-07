@@ -52,7 +52,7 @@ public class CoinLogServiceImpl implements CoinLogService {
         return CoinLogResponse.CreateCoinLogDtoList.fromEntity(coinLogs);
 
     }
-
+    @Transactional
     @Override
     public CoinLogResponse.CreateCoinLogDtoList getCoinAddLog(Long userId) {
         User user = userRepository.findById(userId)
@@ -60,7 +60,7 @@ public class CoinLogServiceImpl implements CoinLogService {
         List<CoinLog> coinLogs = coinLogRepository.findAllByUserIdAndCoin(userId, Coin.ADD);
         return CoinLogResponse.CreateCoinLogDtoList.fromEntity(coinLogs);
     }
-
+    @Transactional
     @Override
     public CoinLogResponse.CreateCoinLogDtoList getCoinUseLog(Long userId) {
         User user = userRepository.findById(userId)
